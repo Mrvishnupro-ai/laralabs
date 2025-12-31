@@ -1,0 +1,176 @@
+@import "tailwindcss";
+
+.playfair-italic-custom {
+  font-family: var(--font-playfair), serif;
+  font-weight: 600;
+  font-style: italic;
+}
+
+/* User Requested Font Classes */
+.playfair-display-semibold-italic {
+  font-family: var(--font-playfair), serif;
+  font-weight: 600;
+  font-style: italic;
+}
+
+.tinos-regular {
+  font-family: var(--font-tinos), serif;
+  font-weight: 400;
+  font-style: normal;
+}
+
+.tinos-bold {
+  font-family: var(--font-tinos), serif;
+  font-weight: 400;
+  /* User requested 500 for 'Bold' */
+  font-style: normal;
+}
+
+.tinos-regular-italic {
+  font-family: var(--font-tinos), serif;
+  font-weight: 400;
+  font-style: italic;
+}
+
+.tinos-bold-italic {
+  font-family: var(--font-tinos), serif;
+  font-weight: 400;
+  font-style: italic;
+}
+
+:root {
+  --background: #0a0a16;
+  --foreground: #ffffff;
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --font-sans: var(--font-inter);
+  --font-serif: var(--font-playfair);
+  --font-playfair: var(--font-playfair);
+  --font-tinos: var(--font-tinos);
+}
+
+body {
+  background: var(--background);
+  color: var(--foreground);
+  font-family: var(--font-sans), sans-serif;
+  overflow-x: hidden;
+}
+
+/* Hero Animations & Styles */
+@keyframes gradientBG {
+  0% {
+    background-position: 0% 50%;
+  }
+
+  50% {
+    background-position: 100% 50%;
+  }
+
+  100% {
+    background-position: 0% 50%;
+  }
+}
+
+.animate-gradient-bg {
+  background: linear-gradient(-45deg, #000000, #031c3b, #000000, #05264e, #10003f);
+  background-size: 400% 400%;
+  animation: gradientBG 25s ease infinite;
+}
+
+.badge-wrapper {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 20px;
+  margin-bottom: 20px;
+  width: 100%;
+}
+
+.line-decoration {
+  height: 1px;
+  width: 60px;
+  /* Reduced from 120px for mobile safety, md:w-[120px] in tailwind can override */
+  position: relative;
+  opacity: 0.6;
+}
+
+.line-decoration.left {
+  background: linear-gradient(90deg, rgba(255, 255, 255, 0) 0%, rgba(255, 255, 255, 0.5) 100%);
+}
+
+.line-decoration.right {
+  background: linear-gradient(90deg, rgba(255, 255, 255, 0.5) 0%, rgba(255, 255, 255, 0) 100%);
+}
+
+.line-decoration::after {
+  content: '';
+  position: absolute;
+  width: 6px;
+  height: 6px;
+  background: #fff;
+  border-radius: 50%;
+  top: 50%;
+  transform: translateY(-50%);
+  box-shadow: 0 0 8px rgba(255, 255, 255, 0.8);
+}
+
+.line-decoration.left::after {
+  right: -2px;
+}
+
+.line-decoration.right::after {
+  left: -2px;
+}
+
+/* Text Gradients */
+.font-geom {
+  font-family: var(--font-sans);
+  font-weight: 600;
+  letter-spacing: -1px;
+  background: linear-gradient(180deg, #A0B0C0 20%, #FFFFFF 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.font-playfair-bold-italic {
+  font-family: var(--font-serif);
+  font-weight: 700;
+  font-style: italic;
+  background: linear-gradient(180deg, #3B82F6 0%, #BDE0FE 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  padding-right: 5px;
+}
+
+/* Trusted By Slider */
+.trusted-by-section {
+  width: 100%;
+  overflow: hidden;
+  position: relative;
+  padding: 20px 0;
+  mask-image: linear-gradient(to right, transparent, black 20%, black 80%, transparent);
+  -webkit-mask-image: linear-gradient(to right, transparent, black 20%, black 80%, transparent);
+}
+
+.logos-slide {
+  display: flex;
+  animation: slideLogos 35s linear infinite;
+  width: max-content;
+  /* Ensure it fits content */
+}
+
+@keyframes slideLogos {
+  from {
+    transform: translateX(0);
+  }
+
+  to {
+    transform: translateX(-50%);
+    /* Assuming doubled content for seamless loop */
+  }
+}
