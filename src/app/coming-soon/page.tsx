@@ -43,41 +43,10 @@ export default function ComingSoon() {
     };
 
     return (
-        <main className="relative min-h-screen w-full flex flex-col items-center justify-center overflow-hidden bg-background text-foreground font-sans selection:bg-blue-500/30">
+        <main className="relative min-h-screen w-full flex flex-col items-center justify-center overflow-hidden text-foreground font-sans selection:bg-blue-500/30">
 
             {/* Background - Deep Space Gradients aligned with Agency Theme */}
             {/* Background - Deep Space Gradients aligned with Agency Theme */}
-            <div className="absolute inset-0 z-0 bg-[#0a0a16]">
-                {/* Main Gradient Animation */}
-                <div className="absolute inset-0 animate-gradient-bg opacity-30"></div>
-
-                {/* Pulsing Glows */}
-                <motion.div
-                    animate={{ scale: [1, 1.2, 1], opacity: [0.3, 0.5, 0.3] }}
-                    transition={{ duration: 8, repeat: Infinity, ease: "easeInOut" }}
-                    className="absolute top-[-20%] left-[-10%] w-[800px] h-[800px] bg-blue-900/40 rounded-full blur-[120px] mix-blend-screen pointer-events-none"
-                />
-                <motion.div
-                    animate={{ scale: [1, 1.1, 1], opacity: [0.3, 0.5, 0.3] }}
-                    transition={{ duration: 10, repeat: Infinity, ease: "easeInOut", delay: 1 }}
-                    className="absolute bottom-[-20%] right-[-10%] w-[800px] h-[800px] bg-indigo-900/40 rounded-full blur-[120px] mix-blend-screen pointer-events-none"
-                />
-
-                {/* Vignette Overlay for Depth */}
-                <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,transparent_40%,rgba(0,0,0,0.8)_100%)] pointer-events-none" />
-
-                {/* Floating Bokeh Orbs */}
-                <motion.div
-                    animate={{ x: [0, 100, 0], y: [0, -50, 0], opacity: [0.2, 0.5, 0.2] }}
-                    transition={{ duration: 20, repeat: Infinity, ease: "linear" }}
-                    className="absolute top-1/4 left-1/4 w-64 h-64 bg-cyan-500/10 rounded-full blur-[80px] pointer-events-none mix-blend-screen"
-                />
-                <motion.div
-                    animate={{ x: [0, -70, 0], y: [0, 100, 0], opacity: [0.2, 0.4, 0.2] }}
-                    transition={{ duration: 25, repeat: Infinity, ease: "linear" }}
-                    className="absolute bottom-1/3 right-1/4 w-96 h-96 bg-purple-500/10 rounded-full blur-[100px] pointer-events-none mix-blend-screen"
-                />
-            </div>
 
             {/* Glass Elements */}
 

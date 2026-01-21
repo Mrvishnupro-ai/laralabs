@@ -4,13 +4,12 @@ import React from "react";
 
 export default function Navbar() {
     const navItems = [
-        { name: "Work", href: "#" },
-        { name: "Approach", href: "#" },
-        { name: "Services", href: "#" },
-        { name: "News", href: "#" },
-        { name: "About", href: "#" },
-        { name: "Join", href: "#" },
-        { name: "Contact", href: "#" },
+        { name: "Home", href: "/" },
+        { name: "Services", href: "/services" },
+        { name: "Blog", href: "/blog" },
+        { name: "About", href: "/about" },
+        { name: "Join", href: "/join" },
+        { name: "Contact", href: "/contact" },
     ];
 
     return (

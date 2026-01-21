@@ -1,61 +1,71 @@
 "use client";
 
-import React, { useState, ChangeEvent } from 'react';
+import React, { useState } from "react";
+import { Send } from "lucide-react";
+import ChatModal from "./ChatModal";
 
-const ChatBox: React.FC = () => {
-    const [message, setMessage] = useState<string>('');
+export default function ChatBox() {
+  const [message, setMessage] = useState("");
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
-    const handleInputChange = (e: ChangeEvent<HTMLTextAreaElement>) => {
-        setMessage(e.target.value);
-    };
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!message.trim()) return;
+    setIsModalOpen(true);
+  };
 
-    return (
-        <div className="w-full max-w-[650px] mx-auto my-[20px] relative z-10">
-            <style>
-                {`
-                @keyframes borderFlow {
-                    0% { background-position: 0% 0%; }
-                    100% { background-position: -200% 0%; }
-                }
-                `}
-            </style>
+  const handleModalSubmit = (formData: any) => {
+    console.log("Full Request:", {
+      message,
+      context: formData
+    });
+    setMessage("");
+    setIsModalOpen(false);
+  };
 
-            <div className="relative bg-transparent backdrop-blur-[12px] rounded-[12px] p-[18px_12px_18px_20px] flex flex-row items-center gap-3 transition-transform duration-300 hover:-translate-y-[2px]">
-                {/* Border shine effect */}
-                <div
-                    className="absolute inset-0 rounded-[12px] p-[1.5px] pointer-events-none z-[2]"
-                    style={{
-                        background: 'linear-gradient(115deg, rgba(255, 255, 255, 0.05) 0%, rgba(255, 255, 255, 0.05) 40%, rgba(255, 255, 255, 0.9) 50%, rgba(255, 255, 255, 0.05) 60%, rgba(255, 255, 255, 0.05) 100%)',
-                        backgroundSize: '200% 100%',
-                        animation: 'borderFlow 4s linear infinite',
-                        WebkitMask: 'linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0)',
-                        mask: 'linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0)',
-                        WebkitMaskComposite: 'xor',
-                        maskComposite: 'exclude'
-                    }}
-                />
+  return (
+    <div className="w-full max-w-2xl mx-auto mb-10 z-10 relative group">
+      {/* Moving Shining Silver Border - Masked to only show edges */}
+      <div 
+        className="absolute inset-0 rounded-2xl pointer-events-none z-0"
+        style={{
+          mask: "linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0)",
+          WebkitMask: "linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0)",
+          maskComposite: "exclude",
+          WebkitMaskComposite: "xor",
+          padding: "6px", // Increased thickness for visibility
+        }}
+      >
+        {/* Intense Silver & White Highlight Gradient */}
+        <div className="absolute inset-[-100%] animate-[spin_12s_linear_infinite] bg-[conic-gradient(from_90deg_at_50%_50%,#0000_0%,#cbd5e1_30%,#ffffff_50%,#cbd5e1_70%,#0000_100%)] opacity-100" />
+      </div>
 
-                <div className="flex-1 flex items-center">
-                    <textarea
-                        className="w-full bg-transparent border-none outline-none text-white/95 font-lexend font-medium text-[16px] leading-normal resize-none min-h-[24px] h-6 p-0 m-0 overflow-hidden placeholder:text-white/60 placeholder:font-playfair placeholder:font-medium placeholder:opacity-80"
-                        placeholder="Talk to our Expert to know how we can help your business..."
-                        value={message}
-                        onChange={handleInputChange}
-                        rows={1}
-                    />
-                </div>
-                <div className="flex items-center gap-2 shrink-0">
-                    <button suppressHydrationWarning className="bg-gradient-to-b from-white to-[#D0D0D0] text-black border border-white/80 rounded-[16px] px-6 py-3 font-inter text-[15px] font-bold cursor-pointer flex items-center gap-2 shadow-[inset_0_1px_0_rgba(255,255,255,0.9),0_5px_15px_rgba(0,0,0,0.3)] transition-all duration-300 uppercase tracking-[0.5px] hover:bg-gradient-to-b hover:from-white hover:to-[#E0E0E0] hover:-translate-y-[1px] hover:shadow-none active:scale-95">
-                        Send
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" className="w-[18px] h-[18px] rotate-45 -mt-0.5 -mr-0.5">
-                            <line x1="22" y1="2" x2="11" y2="13"></line>
-                            <polygon points="22 2 15 22 11 13 2 9 22 2"></polygon>
-                        </svg>
-                    </button>
-                </div>
-            </div>
-        </div>
-    );
-};
+      <form
+        onSubmit={handleSubmit}
+        className="relative z-10 flex items-center gap-2 p-3 bg-black/10 rounded-2xl backdrop-blur-3xl border border-white/20 h-20 shadow-2xl transition-all duration-300"
+      >
+        <input
+          type="text"
+          value={message}
+          onChange={(e) => setMessage(e.target.value)}
+          placeholder="Talk to our Expert to know how we can help you "
+          className="flex-1 bg-transparent border-none outline-none text-white placeholder:text-gray-400 px-4 text-sm md:text-lg w-full h-full"
+        />
+        <button
+          type="submit"
+          className="relative h-12 px-6 rounded-xl bg-gradient-to-b from-gray-100 to-gray-300 text-gray-900 font-bold shadow-[0px_2px_0px_0px_#9ca3af,inset_0px_1px_0px_0px_rgba(255,255,255,1)] hover:brightness-105 active:translate-y-[2px] active:shadow-none transition-all flex items-center gap-2"
+        >
+          <span className="drop-shadow-sm">Send</span>
+          <Send className="w-4 h-4" />
+        </button>
+      </form>
 
-export default ChatBox;
+      <ChatModal 
+        isOpen={isModalOpen}
+        onClose={() => setIsModalOpen(false)}
+        initialMessage={message}
+        onSubmit={handleModalSubmit}
+      />
+    </div>
+  );
+}

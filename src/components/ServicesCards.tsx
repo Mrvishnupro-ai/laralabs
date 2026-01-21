@@ -5,6 +5,7 @@ import Image from 'next/image';
 import founderImg from '../assets/services-cards/founder.jpg';
 import businessImg from '../assets/services-cards/business.jpg';
 import brandsImg from '../assets/services-cards/brands.jpg';
+import { ArrowUpRight } from 'lucide-react';
 
 interface Service {
     title: string;
@@ -32,36 +33,46 @@ const ServicesCards: React.FC = () => {
     ];
 
     return (
-        <section className="px-[10%] py-20 flex justify-between gap-8 flex-wrap w-full bg-transparent box-border">
-            {services.map((service, index) => (
-                <div
-                    key={index}
-                    className="flex-1 min-w-[350px] h-[600px] rounded-[32px] relative overflow-hidden group shadow-[0_20px_40px_rgba(0,0,0,0.3)] hover:shadow-[0_30px_60px_rgba(0,0,0,0.5)] transition-all duration-300 hover:-translate-y-2 border border-white/10"
-                >
-                    {/* Background Image */}
-                    <Image
-                        src={service.image}
-                        alt={service.title}
-                        fill
-                        className="object-cover transition-transform duration-700 group-hover:scale-105"
-                        quality={90}
-                    />
+        <section className="w-full px-[10%] pt-10 pb-8 font-sans">
+            <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 w-full">
+                {services.map((service, index) => (
+                    <div
+                        key={index}
+                        className="w-full h-[280px] rounded-[32px] relative overflow-hidden group border border-white/10 shadow-2xl bg-[#0f172a] transition-all duration-500 hover:-translate-y-2 hover:shadow-cyan-900/20"
+                    >
+                        {/* Background Image */}
+                        <div className="absolute inset-0 w-full h-full">
+                            <Image
+                                src={service.image}
+                                alt={service.title}
+                                fill
+                                className="object-cover object-center transition-transform duration-700 group-hover:scale-105 opacity-60"
+                                quality={90}
+                            />
+                        </div>
 
-                    {/* Strong Gradient Overlay for Text Readability */}
-                    <div className="absolute inset-0 bg-gradient-to-t from-black via-black/60 to-transparent opacity-90 transition-opacity duration-300" />
+                        {/* Bottom Gradient for Text Readability */}
+                        <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/30 to-transparent" />
 
-                    {/* Content */}
-                    <div className="absolute bottom-0 left-0 w-full p-10 flex flex-col justify-end h-full z-10">
-                        <h2 className="text-4xl font-bold font-sans text-white mb-4 drop-shadow-lg tracking-tight">
-                            {service.title}
-                        </h2>
+                        {/* Content */}
+                        <div className="absolute bottom-0 left-0 w-full px-8 pb-12 pt-8 flex items-end justify-between z-10 gap-4">
+                            <div className="flex flex-col max-w-[60%] transform transition-transform duration-500 translate-y-2 group-hover:translate-y-0">
+                                <h2 className="text-3xl font-bold text-white mb-2 leading-tight drop-shadow-lg">
+                                    {service.title}
+                                </h2>
+                                <p className="text-gray-300 text-sm font-medium leading-relaxed line-clamp-2 drop-shadow-md">
+                                    {service.subtitle}
+                                </p>
+                            </div>
 
-                        <p className="text-gray-300 font-sans text-base leading-relaxed mb-2 max-w-[90%] drop-shadow-md">
-                            {service.subtitle}
-                        </p>
+                            <button className="flex-shrink-0 px-6 py-2.5 bg-white/10 backdrop-blur-md border border-white/20 text-white rounded-full text-sm font-semibold hover:bg-white/20 transition-all flex items-center gap-2 shadow-lg group-hover:scale-105">
+                                <ArrowUpRight className="w-4 h-4" />
+                                Explore
+                            </button>
+                        </div>
                     </div>
-                </div>
-            ))}
+                ))}
+            </div>
         </section>
     );
 };

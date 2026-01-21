@@ -27,7 +27,7 @@ const CardSwipeStack = () => {
     useEffect(() => {
         const timer = setInterval(() => {
             nextCard();
-        }, 5000); // 5 seconds interval
+        }, 8000); // 8 seconds interval
         return () => clearInterval(timer);
     }, [index, nextCard]); // Reset timer on index change
 
@@ -50,7 +50,7 @@ const CardSwipeStack = () => {
     };
 
     return (
-        <div className="relative w-full min-h-[900px] overflow-hidden flex items-center justify-center group">
+        <div className="relative w-full min-h-[700px] overflow-hidden flex items-center justify-center group">
             {/* Left Arrow */}
             <button
                 onClick={prevCard}
@@ -89,7 +89,7 @@ const CardSwipeStack = () => {
                     animate="center"
                     exit="exit"
                     transition={{ duration: 0.8, ease: "easeInOut" }}
-                    className="absolute w-full flex justify-center px-4"
+                    className="absolute w-full flex justify-center"
                 >
                     <CurrentCard />
                 </motion.div>

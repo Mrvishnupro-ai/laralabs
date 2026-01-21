@@ -75,9 +75,10 @@ body {
 }
 
 .animate-gradient-bg {
-  background: linear-gradient(-45deg, #000000, #031c3b, #000000, #05264e, #10003f);
+  background: linear-gradient(-45deg, #02003d, #001228, #000000, #001935, #000c50);
   background-size: 400% 400%;
   animation: gradientBG 25s ease infinite;
+  background-attachment: fixed;
 }
 
 .badge-wrapper {
@@ -164,6 +165,7 @@ body {
   /* Ensure it fits content */
 }
 
+
 @keyframes slideLogos {
   from {
     transform: translateX(0);
@@ -173,4 +175,41 @@ body {
     transform: translateX(-50%);
     /* Assuming doubled content for seamless loop */
   }
+}
+
+@keyframes slideLogosReverse {
+  from {
+    transform: translateX(-50%);
+  }
+
+  to {
+    transform: translateX(0);
+  }
+}
+
+
+@media (min-width: 1024px) {
+  body {
+    zoom: 80%;
+  }
+}
+
+/* Custom Additions for CTA */
+@font-face {
+  font-family: 'Telegraph';
+  src: local('Telegraph'), local('Telegraph-Regular');
+}
+
+@keyframes float {
+  0% { transform: translateY(0px); }
+  50% { transform: translateY(-10px); }
+  100% { transform: translateY(0px); }
+}
+
+.animate-float {
+  animation: float 6s ease-in-out infinite;
+}
+
+.animate-float-delayed {
+  animation: float 6s ease-in-out 3s infinite;
 }

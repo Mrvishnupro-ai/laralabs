@@ -32,7 +32,7 @@ const ThreeSimpleSteps: React.FC = () => {
     ];
 
     return (
-        <section className="py-[100px] px-[10%] w-full relative overflow-hidden">
+        <section className="pt-10 pb-10 px-[10%] w-full relative overflow-hidden">
             {/* Embedded styles for custom animations */}
             <style>
                 {`
@@ -59,7 +59,7 @@ const ThreeSimpleSteps: React.FC = () => {
 
             <div className="relative z-10 flex flex-col items-center w-full ">
                 {/* Section Heading */}
-                <h2 className="font-playfair text-[60px] md:text-[68px] font-bold text-center text-white mb-16 leading-tight drop-shadow-lg">
+                <h2 className="font-playfair text-5xl md:text-7xl font-bold text-center text-white mb-16 leading-tight drop-shadow-lg">
                     <span className="bg-gradient-to-r from-[#FFFFFF] to-[#C0C0C0] bg-clip-text text-transparent italic">
                         How we Design the Solution
                     </span>
@@ -71,7 +71,7 @@ const ThreeSimpleSteps: React.FC = () => {
                         <div
                             key={step.id}
                             className={`group relative flex flex-col items-start p-10 rounded-[32px] 
-                         bg-black border border-white/10 overflow-hidden
+                         bg-transparent border border-white/10 overflow-hidden
                          transition-all duration-500 hover:border-white/20 hover:shadow-2xl
                          ${index === 0 ? 'md:row-span-2 min-h-[500px] justify-end' : 'justify-center min-h-[260px]'}`}
                         >
@@ -86,21 +86,12 @@ const ThreeSimpleSteps: React.FC = () => {
                             </div>
 
                             {/* Gradient Overlay for Text Readability */}
-                            <div className="absolute inset-0 z-10 bg-gradient-to-t from-black/90 via-black/40 to-transparent opacity-90" />
+                            {/* Gradient Overlay for Text Readability */}
+                            <div className="absolute inset-0 z-10 bg-gradient-to-t from-black/100 via-black/50 to-transparent opacity-80" />
 
-                            {/* Noise Texture Overlay */}
-                            <div className="absolute inset-0 z-20 opacity-[0.3] mix-blend-overlay pointer-events-none"
-                                style={{
-                                    backgroundImage: `url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E")`
-                                }}
-                            />
 
-                            {/* Large Step Label Background */}
-                            <div className="absolute top-4 left-6 z-10 select-none pointer-events-none">
-                                <h4 className="font-playfair text-[80px] md:text-[100px] font-bold text-white/5 leading-none tracking-tight">
-                                    {step.label}
-                                </h4>
-                            </div>
+
+
 
                             {/* Content Wrapper */}
                             <div className="relative z-30 flex flex-col gap-2 mt-auto">
@@ -113,10 +104,7 @@ const ThreeSimpleSteps: React.FC = () => {
                                 </p>
 
                                 {/* Learn More */}
-                                <a href="#" className={`font-montserrat font-semibold text-white hover:text-blue-300 transition-colors duration-300 flex items-center gap-2 mt-2 inline-block`}>
-                                    Learn More
-                                    <span className="text-lg leading-none group-hover:translate-x-1 transition-transform">→</span>
-                                </a>
+
                             </div>
                         </div>
                     ))}

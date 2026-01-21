@@ -6,7 +6,7 @@ import cardImage from '../assets/card-image3.png';
 
 const SaraCard: React.FC = () => {
     return (
-        <section className="w-full px-[10%] py-20 flex justify-center">
+        <section className="w-full px-[10%] py-8 flex justify-center">
             {/* Embedded styles for custom animations */}
             <style>
                 {`
@@ -56,7 +56,7 @@ const SaraCard: React.FC = () => {
 
                 <div className="flex-1 z-[3] max-w-[55%] p-[30px_50px_50px_50px] max-md:max-w-full max-md:mb-10 max-md:p-5 flex flex-col justify-center">
                     <div className="flex flex-col items-start max-md:items-center max-md:text-center">
-                        <h2 className="font-playfair text-[56px] font-bold tracking-[-0.5px] mb-4 bg-gradient-to-b from-white via-white to-[#A0B0C0] bg-clip-text text-transparent drop-shadow-[0_0_30px_rgba(0,200,255,0.2)] leading-[1.05]">
+                        <h2 className="font-playfair text-4xl md:text-6xl font-bold tracking-[-0.5px] mb-4 bg-gradient-to-b from-white via-white to-[#A0B0C0] bg-clip-text text-transparent drop-shadow-[0_0_30px_rgba(0,200,255,0.2)] leading-[1.05]">
                             Meet Sara, Your Marketing Head.
                         </h2>
                         <h3 className="font-montserrat text-[24px] leading-[1.4] text-white/95 mb-5 font-medium">

@@ -35,6 +35,20 @@ export default function RootLayout({
       <body
         className={`${inter.variable} ${playfair.variable} ${tinos.variable} antialiased bg-[#0a0a16] text-white`}
       >
+        {/* Base Gradient Background */}
+        <div className="fixed inset-0 z-[-2] animate-gradient-bg" />
+        
+        {/* Static Image Overlay */}
+        <div 
+          className="fixed inset-0 z-[-1] opacity-15"
+          style={{
+            backgroundImage: "url('/ultimate.jpg')",
+            backgroundSize: "cover",
+            backgroundPosition: "center",
+            backgroundRepeat: "no-repeat",
+          }}
+        />
+
         {children}
         <FooterWrapper />
       </body>
