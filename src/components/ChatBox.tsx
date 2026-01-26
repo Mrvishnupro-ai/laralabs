@@ -42,21 +42,21 @@ export default function ChatBox() {
 
       <form
         onSubmit={handleSubmit}
-        className="relative z-10 flex items-center gap-2 p-3 bg-black/10 rounded-2xl backdrop-blur-3xl border border-white/20 h-20 shadow-2xl transition-all duration-300"
+        className="relative z-10 flex items-center gap-2 p-1.5 md:p-3 bg-black/10 rounded-xl md:rounded-2xl backdrop-blur-3xl border border-white/20 h-14 md:h-20 shadow-2xl transition-all duration-300"
       >
         <input
           type="text"
           value={message}
           onChange={(e) => setMessage(e.target.value)}
           placeholder="Talk to our Expert to know how we can help you "
-          className="flex-1 bg-transparent border-none outline-none text-white placeholder:text-gray-400 px-4 text-sm md:text-lg w-full h-full"
+          className="flex-1 bg-transparent border-none outline-none text-white placeholder:text-gray-400 px-3 md:px-4 text-xs md:text-lg w-full h-full"
         />
         <button
           type="submit"
-          className="relative h-12 px-6 rounded-xl bg-gradient-to-b from-gray-100 to-gray-300 text-gray-900 font-bold shadow-[0px_2px_0px_0px_#9ca3af,inset_0px_1px_0px_0px_rgba(255,255,255,1)] hover:brightness-105 active:translate-y-[2px] active:shadow-none transition-all flex items-center gap-2"
+          className="relative h-10 md:h-12 px-4 md:px-6 rounded-lg md:rounded-xl bg-gradient-to-b from-gray-100 to-gray-300 text-gray-900 font-bold shadow-[0px_2px_0px_0px_#9ca3af,inset_0px_1px_0px_0px_rgba(255,255,255,1)] hover:brightness-105 active:translate-y-[2px] active:shadow-none transition-all flex items-center gap-2 text-xs md:text-base"
         >
           <span className="drop-shadow-sm">Send</span>
-          <Send className="w-4 h-4" />
+          <Send className="w-3 h-3 md:w-4 md:h-4" />
         </button>
       </form>
 

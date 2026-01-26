@@ -8,10 +8,10 @@ export default function WorkPage() {
 
       {/* DENSE BACKGROUND ELEMENTS */}
 
-      <main className="relative z-10 pt-32 pb-0 w-full">
+      <main className="relative z-10 w-full">
         
         {/* --- HERO SECTION (Halo Style) --- */}
-        <section className="relative flex flex-col items-center justify-center min-h-[90vh] mb-20 px-4 md:px-8 overflow-hidden">
+        <section className="relative flex flex-col items-center justify-center min-h-[90vh] pt-24 md:pt-32 mb-20 px-[5%] md:px-[10%] overflow-hidden">
           
           {/* MASSIVE BLUR BACKGROUND (The "Halo") */}
           <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] md:w-[1200px] h-[600px] md:h-[800px] bg-blue-600/30 blur-[120px] rounded-full pointer-events-none z-0 opacity-80 mix-blend-screen animate-pulse"></div>
@@ -23,7 +23,7 @@ export default function WorkPage() {
           <div className="relative z-10 text-center max-w-4xl mx-auto flex flex-col items-center">
             
             {/* Main Title */}
-            <h1 className="text-6xl md:text-8xl lg:text-9xl font-bold tracking-tighter text-white mb-6 drop-shadow-2xl">
+            <h1 className="text-3xl md:text-8xl lg:text-9xl font-bold tracking-tighter text-white mb-6 drop-shadow-2xl">
               Laralabs AI <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-200 to-blue-500 font-serif italic opacity-90">studio.</span>
             </h1>
 
@@ -55,8 +55,8 @@ export default function WorkPage() {
 
 
         {/* --- INTRO TEXT SECTION --- */}
-        <section className="relative max-w-7xl mx-auto mb-40 px-6 z-10">
-          <div className="flex flex-col md:flex-row gap-16 items-start">
+        <section className="relative max-w-7xl mx-auto mb-20 md:mb-40 px-6 z-10">
+          <div className="flex flex-col md:flex-row gap-8 md:gap-16 items-start">
              <div className="md:w-2/3">
                 <h2 className="text-4xl md:text-6xl md:leading-[1.1] font-medium text-white mb-8">
                   We are a <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-indigo-400 font-serif italic pr-2">creative collective</span> 

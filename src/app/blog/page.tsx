@@ -64,10 +64,10 @@ export default function BlogPage() {
     <div className="min-h-screen text-white selection:bg-blue-500/30 font-sans">
         <Navbar />
         
-        <main className="pt-40 pb-20 px-4 md:px-8 max-w-7xl mx-auto">
+        <main className="pt-24 md:pt-32 pb-20 px-[5%] md:px-[10%] max-w-7xl mx-auto">
             {/* Header Section */}
-            <div className="mb-24 text-center animate-in fade-in slide-in-from-bottom-4 duration-700">
-                <h1 className="text-5xl md:text-7xl font-bold mb-6 text-white tracking-tight">
+            <div className="mb-12 text-center animate-in fade-in slide-in-from-bottom-4 duration-700">
+                <h1 className="text-3xl md:text-7xl font-bold mb-6 text-white tracking-tight">
                     Latest News
                 </h1>
                 <p className="text-slate-400 text-lg md:text-xl max-w-2xl mx-auto leading-relaxed">
@@ -77,7 +77,7 @@ export default function BlogPage() {
 
             {/* Posts Grid */}
             <section className="animate-in fade-in slide-in-from-bottom-8 duration-1000 delay-200">
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-x-8 gap-y-12">
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-x-8 gap-y-8 md:gap-y-12">
                     {posts.map((post, index) => (
                         <BlogCard key={index} {...post} />
                     ))}

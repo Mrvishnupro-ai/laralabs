@@ -461,7 +461,7 @@ export default function ChatModal({ isOpen, onClose, initialMessage, onSubmit }:
                                         />
                                     </div>
 
-                                    <h2 className="text-xl md:text-2xl font-bold text-transparent bg-clip-text bg-gradient-to-br from-white via-slate-200 to-slate-400 text-center leading-tight drop-shadow-sm max-w-xs">
+                                    <h2 className="text-lg md:text-2xl font-bold text-transparent bg-clip-text bg-gradient-to-br from-white via-slate-200 to-slate-400 text-center leading-tight drop-shadow-sm max-w-xs">
                                         What do you want to know about Lara Labs?
                                     </h2>
                                 </div>
@@ -476,7 +476,7 @@ export default function ChatModal({ isOpen, onClose, initialMessage, onSubmit }:
                                                 animate={{ opacity: 1, x: 0 }}
                                                 transition={{ delay: idx * 0.1 }}
                                                 onClick={() => handleSendMessage(undefined, chip)}
-                                                className="px-4 py-2.5 rounded-2xl bg-white/5 hover:bg-white/10 border border-white/5 hover:border-white/20 text-sm text-gray-300 hover:text-white transition-all text-right shadow-lg backdrop-blur-md"
+                                                className="px-4 py-2.5 rounded-2xl bg-white/5 hover:bg-white/10 border border-white/5 hover:border-white/20 text-xs md:text-sm text-gray-300 hover:text-white transition-all text-right shadow-lg backdrop-blur-md"
                                             >
                                                 {chip}
                                             </motion.button>
@@ -493,7 +493,7 @@ export default function ChatModal({ isOpen, onClose, initialMessage, onSubmit }:
                                             key={i}
                                             className={`flex ${msg.role === 'user' ? 'justify-end' : 'justify-start'}`}
                                         >
-                                            <div className={`p-4 rounded-2xl max-w-[85%] text-sm leading-relaxed backdrop-blur-md shadow-lg ${
+                                        <div className={`p-3 md:p-4 rounded-2xl max-w-[85%] text-xs md:text-sm leading-relaxed backdrop-blur-md shadow-lg ${
                                                 msg.role === 'user' 
                                                 ? 'bg-blue-600/20 text-white rounded-tr-sm border border-blue-500/20' 
                                                 : 'bg-black/20 text-gray-100 rounded-tl-sm border border-white/5'
@@ -502,10 +502,10 @@ export default function ChatModal({ isOpen, onClose, initialMessage, onSubmit }:
                                                     remarkPlugins={[remarkGfm]}
                                                     components={{
                                                         // Headings
-                                                        h1: ({node, ...props}) => <h1 className="text-xl font-bold mb-2 text-white" {...props} />,
-                                                        h2: ({node, ...props}) => <h2 className="text-lg font-bold mb-2 text-white" {...props} />,
-                                                        h3: ({node, ...props}) => <h3 className="text-base font-semibold mb-1.5 text-white" {...props} />,
-                                                        h4: ({node, ...props}) => <h4 className="text-sm font-semibold mb-1 text-white" {...props} />,
+                                                        h1: ({node, ...props}) => <h1 className="text-lg md:text-xl font-bold mb-2 text-white" {...props} />,
+                                                        h2: ({node, ...props}) => <h2 className="text-base md:text-lg font-bold mb-2 text-white" {...props} />,
+                                                        h3: ({node, ...props}) => <h3 className="text-sm md:text-base font-semibold mb-1.5 text-white" {...props} />,
+                                                        h4: ({node, ...props}) => <h4 className="text-xs md:text-sm font-semibold mb-1 text-white" {...props} />,
                                                         // Paragraphs
                                                         p: ({node, ...props}) => <p className="mb-2 last:mb-0" {...props} />,
                                                         // Lists
@@ -578,7 +578,7 @@ export default function ChatModal({ isOpen, onClose, initialMessage, onSubmit }:
                                         onChange={(e) => setChatMessage(e.target.value)}
                                         placeholder={remainingMessages === 0 ? "Message limit reached..." : "Ask AI anything..."}
                                         disabled={remainingMessages === 0}
-                                        className="flex-1 bg-transparent border-none outline-none text-white placeholder:text-gray-500 px-4 py-3 h-full text-sm font-medium disabled:cursor-not-allowed"
+                                        className="flex-1 bg-transparent border-none outline-none text-white placeholder:text-gray-500 px-3 md:px-4 py-3 h-full text-xs md:text-sm font-medium disabled:cursor-not-allowed"
                                     />
                                     <div className="flex items-center gap-1 pr-1">
                                         <button 

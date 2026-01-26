@@ -105,7 +105,7 @@ const servicesData = [
 
 export default function ServicesSwipeCardStack() {
   return (
-    <div className="relative w-full pt-4 pb-0 overflow-hidden flex flex-col justify-center">
+    <div className="relative w-full pt-0 md:pt-4 pb-0 overflow-hidden flex flex-col justify-center">
       
       {/* Background Glow - Subtle & Merged with page BG */}
       <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full h-[300px] bg-blue-900/10 blur-[100px] rounded-full pointer-events-none z-0" />
@@ -141,9 +141,9 @@ function SimpleCard({ data }: { data: ServiceData }) {
     const formattedNumber = `#${data.id.toString().padStart(2, '0')}`;
 
     return (
-        <div className="relative flex-shrink-0 w-[280px] mr-4 group cursor-pointer flex flex-col">
+        <div className="relative flex-shrink-0 w-[200px] md:w-[280px] mr-3 md:mr-4 group cursor-pointer flex flex-col">
              {/* Image Card */}
-             <div className="w-full h-[360px] rounded-xl overflow-hidden bg-[#0a0a0a] border border-white/10 relative transition-transform duration-500 hover:-translate-y-4 shadow-lg hover:shadow-blue-900/20">
+             <div className="w-full h-[260px] md:h-[360px] rounded-xl overflow-hidden bg-[#0a0a0a] border border-white/10 relative transition-transform duration-500 hover:-translate-y-4 shadow-lg hover:shadow-blue-900/20">
                  <Image 
                     src={data.image} 
                     alt={data.title}

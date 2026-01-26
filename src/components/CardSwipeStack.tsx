@@ -50,7 +50,7 @@ const CardSwipeStack = () => {
     };
 
     return (
-        <div className="relative w-full min-h-[700px] overflow-hidden flex items-center justify-center group">
+        <div className="relative w-full min-h-[500px] md:min-h-[700px] overflow-hidden flex items-center justify-center group">
             {/* Left Arrow */}
             <button
                 onClick={prevCard}
@@ -69,8 +69,8 @@ const CardSwipeStack = () => {
                 <ChevronRight size={40} />
             </button>
 
-            {/* Mobile Arrows (smaller and positioned differently if needed, or just visible) */}
-            <div className="absolute bottom-10 flex gap-10 md:hidden z-20 pointer-events-none">
+            {/* Mobile Arrows (smaller and positioned differently if needed, or just visible) - HIDDEN as per request */}
+            <div className="absolute bottom-10 gap-10 md:hidden z-20 pointer-events-none hidden">
                 <button onClick={prevCard} className="pointer-events-auto p-3 rounded-full bg-white/10 backdrop-blur-md border border-white/10 text-white">
                     <ChevronLeft size={30} />
                 </button>

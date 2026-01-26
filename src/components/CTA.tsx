@@ -6,8 +6,8 @@ import { FaPhoneAlt } from "react-icons/fa";
 
 export default function CTA() {
   return (
-    <section className="w-full px-[10%] pt-10 pb-20 flex justify-center">
-      <div className="relative w-full rounded-[2rem] overflow-hidden aspect-[10/3.2] flex items-center">
+    <section className="w-full px-[5%] md:px-[10%] pt-0 pb-10 md:pt-10 md:pb-20 flex flex-col items-center gap-6 lg:block lg:gap-0">
+      <div className="relative w-full rounded-[24px] md:rounded-[2rem] overflow-hidden flex h-auto min-h-[150px] lg:block lg:aspect-[10/3.2] items-center">
         {/* Background Image */}
         <div className="absolute inset-0 z-0">
           <Image
@@ -23,35 +23,35 @@ export default function CTA() {
         </div>
 
         {/* Content Grid */}
-        <div className="relative z-10 w-full h-full grid grid-cols-[1.2fr_0.8fr] gap-4 items-center pl-8 pr-4 md:pl-24 md:pr-12">
+        <div className="relative z-10 w-full h-full lg:grid lg:grid-cols-[1.2fr_0.8fr] lg:gap-4 lg:items-center lg:px-6 lg:pt-6 lg:pl-24 lg:pr-12 lg:pb-0">
           
           {/* Left Side: Text */}
-          <div className="flex flex-col justify-center h-full space-y-3 pt-4">
-            <h2 className="text-4xl md:text-5xl lg:text-6xl text-white font-[Telegraph,serif] leading-[1.1] mb-4">
-              Get A Free Ai Growth plan <br /> for your Business
+          <div className="flex flex-col justify-center h-full space-y-2 md:space-y-3 w-[60%] pl-5 py-5 lg:w-auto lg:p-0 lg:pt-4">
+            <h2 className="text-[18px] sm:text-2xl md:text-5xl lg:text-6xl text-white font-sans font-bold leading-[1.1] mb-2 md:mb-4">
+              Get A Free Ai Growth plan <br className="hidden md:block" /> for your Business
             </h2>
             
-            <p className="text-gray-200 text-lg md:text-xl font-light leading-relaxed max-w-lg">
+            <p className="hidden md:block text-gray-200 text-[10px] sm:text-xs md:text-xl font-light leading-relaxed max-w-lg">
               Schedule a strategy call and discover how AI can automate, scale, and optimize your operations.
             </p>
 
-            <div className="pt-2 space-y-3">
-              <p className="text-white text-base md:text-lg uppercase tracking-wider font-semibold opacity-90">
+            <div className="pt-1 md:pt-2 space-y-2 md:space-y-3">
+              <p className="text-white text-[10px] sm:text-xs md:text-lg uppercase tracking-wider font-semibold opacity-90">
                 Claim Free AI Consultation Now
               </p>
               
-              <button className="group flex items-center gap-3 bg-white text-black px-7 py-3 rounded-full font-medium text-base hover:bg-gray-100 transition-colors w-fit">
+              <button suppressHydrationWarning className="hidden lg:flex group items-center gap-2 md:gap-3 bg-white text-black px-4 py-2 md:px-7 md:py-3 rounded-full font-medium text-[10px] sm:text-xs md:text-base hover:bg-gray-100 transition-colors w-fit">
                 Schedule a Call
-                <span className="bg-black text-white rounded-full p-1.5 group-hover:bg-gray-800 transition-colors">
-                   <ArrowUpRight size={18} />
+                <span className="bg-black text-white rounded-full p-1 md:p-1.5 group-hover:bg-gray-800 transition-colors">
+                   <ArrowUpRight size={12} className="md:w-[18px] md:h-[18px]" />
                 </span>
               </button>
             </div>
           </div>
 
-            {/* Right Side: Image */}
-          <div className="relative h-full flex items-end justify-end">
-             <div className="relative z-10 w-full h-[135%]">
+          {/* Right Side: Image */}
+          <div className="absolute bottom-0 right-0 w-[45%] h-[90%] lg:relative lg:w-auto lg:h-full flex items-end justify-end mt-0">
+             <div className="relative z-10 w-full h-full lg:h-[135%] flex items-end">
                 <Image
                   src={personImage}
                   alt="Business Person"
@@ -62,6 +62,14 @@ export default function CTA() {
           </div>
         </div>
       </div>
+
+      {/* Mobile Button - Outside Card */}
+      <button suppressHydrationWarning className="lg:hidden w-full group flex items-center justify-center gap-3 bg-white text-black px-7 py-3 rounded-xl font-medium text-sm hover:bg-gray-100 transition-colors shadow-[0_0_20px_rgba(255,255,255,0.1)]">
+        Schedule a Call
+        <span className="bg-black text-white rounded-full p-1.5 group-hover:bg-gray-800 transition-colors">
+            <ArrowUpRight size={16} />
+        </span>
+      </button>
     </section>
   );
 }

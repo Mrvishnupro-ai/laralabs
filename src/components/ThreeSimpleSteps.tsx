@@ -32,7 +32,7 @@ const ThreeSimpleSteps: React.FC = () => {
     ];
 
     return (
-        <section className="pt-10 pb-10 px-[10%] w-full relative overflow-hidden">
+        <section className="pt-0 pb-[30px] md:pt-10 md:pb-10 px-[5%] md:px-[10%] max-md:px-4 w-full relative overflow-hidden">
             {/* Embedded styles for custom animations */}
             <style>
                 {`
@@ -59,7 +59,7 @@ const ThreeSimpleSteps: React.FC = () => {
 
             <div className="relative z-10 flex flex-col items-center w-full ">
                 {/* Section Heading */}
-                <h2 className="font-playfair text-5xl md:text-7xl font-bold text-center text-white mb-16 leading-tight drop-shadow-lg">
+                <h2 className="font-playfair text-3xl md:text-7xl font-bold text-center text-white mb-8 md:mb-16 leading-tight drop-shadow-lg max-md:text-2xl max-md:mb-6">
                     <span className="bg-gradient-to-r from-[#FFFFFF] to-[#C0C0C0] bg-clip-text text-transparent italic">
                         How we Design the Solution
                     </span>
@@ -70,18 +70,22 @@ const ThreeSimpleSteps: React.FC = () => {
                     {steps.map((step, index) => (
                         <div
                             key={step.id}
-                            className={`group relative flex flex-col items-start p-10 rounded-[32px] 
+                            className={`group relative flex flex-col items-start p-6 md:p-10 max-md:p-3 rounded-[24px] md:rounded-[32px] 
                          bg-transparent border border-white/10 overflow-hidden
                          transition-all duration-500 hover:border-white/20 hover:shadow-2xl
-                         ${index === 0 ? 'md:row-span-2 min-h-[500px] justify-end' : 'justify-center min-h-[260px]'}`}
+                         ${index === 0 ? 'md:row-span-2 min-h-[140px] md:min-h-[500px] justify-end' : 'justify-center min-h-[140px] md:min-h-[260px]'}`}
                         >
                             {/* Background Image */}
-                            <div className="absolute inset-0 z-0 opacity-60 transition-opacity duration-500 group-hover:opacity-40">
+                            <div className="absolute inset-0 max-md:inset-x-4 z-0 opacity-60 transition-opacity duration-500 group-hover:opacity-40">
                                 <Image
                                     src={step.image}
                                     alt="Background"
                                     fill
-                                    className="object-cover grayscale-[20%] group-hover:grayscale-0 transition-all duration-500"
+                                    className={`max-md:object-contain object-cover grayscale-[20%] group-hover:grayscale-0 transition-all duration-500
+                                        ${index === 0 ? 'max-md:object-left' : ''}
+                                        ${index === 1 ? 'max-md:object-right' : ''}
+                                        ${index === 2 ? 'max-md:object-left' : ''}
+                                    `}
                                 />
                             </div>
 
@@ -95,11 +99,11 @@ const ThreeSimpleSteps: React.FC = () => {
 
                             {/* Content Wrapper */}
                             <div className="relative z-30 flex flex-col gap-2 mt-auto">
-                                <h3 className="font-sans text-[32px] md:text-[36px] leading-[1.1] font-bold text-white tracking-wide drop-shadow-md">
+                                <h3 className="font-sans text-[32px] md:text-[36px] leading-[1.1] font-bold text-white tracking-wide drop-shadow-md max-md:text-lg max-md:leading-tight">
                                     {step.title}
                                 </h3>
 
-                                <p className="font-montserrat text-white/70 text-[16px] leading-[1.6] max-w-[90%] mb-2">
+                                <p className="font-montserrat text-white/70 text-[16px] leading-[1.6] max-w-[90%] mb-2 max-md:text-[10px] max-md:leading-tight max-md:mb-0">
                                     {step.description}
                                 </p>
 

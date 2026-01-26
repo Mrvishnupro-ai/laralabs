@@ -29,14 +29,14 @@ const logos = [
 
 export default function LogoTicker() {
   return (
-    <div className="trusted-by-section z-10 w-full max-w-6xl mx-auto border-t border-white/5 pt-6">
-      <p className="text-xs text-gray-500 uppercase tracking-widest mb-8 font-semibold">Technologies Used to Build Ai Systems</p>
+    <div className="trusted-by-section z-10 w-full max-w-6xl mx-auto border-t border-white/5 pt-2 pb-0 md:pt-6">
+      <p className="text-xs text-gray-500 uppercase tracking-widest mb-4 md:mb-8 font-semibold">Technologies Used to Build Ai Systems</p>
 
       <div className="logos-slide flex items-center">
         {/* First Set of Logos */}
-        <div className="flex items-center gap-12 md:gap-20 px-10 min-w-max">
+        <div className="flex items-center gap-8 md:gap-20 px-4 md:px-10 min-w-max">
           {logos.map((logo) => (
-            <div key={logo.id} className="relative w-24 h-12 md:w-32 md:h-16 flex items-center justify-center">
+            <div key={logo.id} className="relative w-20 h-10 md:w-32 md:h-16 flex items-center justify-center">
               <Image
                 src={logo.src}
                 alt={logo.alt}
@@ -48,9 +48,9 @@ export default function LogoTicker() {
         </div>
         
         {/* Duplicate Set for Infinite Scroll */}
-        <div className="flex items-center gap-12 md:gap-20 px-10 min-w-max">
+        <div className="flex items-center gap-8 md:gap-20 px-4 md:px-10 min-w-max">
           {logos.map((logo) => (
-            <div key={`${logo.id}-duplicate`} className="relative w-24 h-12 md:w-32 md:h-16 flex items-center justify-center">
+            <div key={`${logo.id}-duplicate`} className="relative w-20 h-10 md:w-32 md:h-16 flex items-center justify-center">
               <Image
                 src={logo.src}
                 alt={logo.alt}

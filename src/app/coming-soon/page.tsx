@@ -129,14 +129,14 @@ export default function ComingSoon() {
 
 
             {/* Content Container */}
-            <div className="z-20 flex flex-col items-center justify-center text-center px-4 max-w-5xl mx-auto w-full">
+            <div className="z-20 flex flex-col items-center justify-center text-center px-[5%] md:px-[10%] max-w-5xl mx-auto w-full">
 
                 {/* Logo with Graphical Highlights */}
                 <motion.div
                     initial={{ opacity: 0, scale: 0.5 }}
                     animate={{ opacity: 1, scale: 1 }}
                     transition={{ duration: 0.8, ease: "backOut" }}
-                    className="relative mb-10 group"
+                    className="relative mb-6 md:mb-10 group"
                 >
                     {/* Graphical Glow Behind */}
                     <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-32 h-32 bg-blue-500/20 rounded-full blur-[40px] group-hover:bg-blue-400/30 transition-all duration-700"></div>
@@ -156,7 +156,7 @@ export default function ComingSoon() {
                     initial={{ opacity: 0, y: 30 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ duration: 0.8, delay: 0.2 }}
-                    className="text-5xl md:text-7xl lg:text-8xl mb-4 text-white drop-shadow-lg font-bold"
+                    className="text-3xl md:text-7xl lg:text-8xl mb-4 text-white drop-shadow-lg font-bold"
                     style={{ fontFamily: 'var(--font-tinos)' }}
                 >
                     Something amazing
@@ -172,7 +172,7 @@ export default function ComingSoon() {
                     initial={{ opacity: 0, y: 30 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ duration: 0.8, delay: 0.4 }}
-                    className="text-lg md:text-xl text-gray-300/90 mb-12 font-light max-w-xl mx-auto"
+                    className="text-lg md:text-xl text-gray-300/90 mb-8 md:mb-12 font-light max-w-xl mx-auto"
                 >
                     We build digital workers that work for you. Enter your mail to join in our community
                 </motion.p>

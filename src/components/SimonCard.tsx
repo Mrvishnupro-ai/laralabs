@@ -2,11 +2,12 @@
 
 import React from 'react';
 import Image from 'next/image';
+import { CheckCircle } from 'lucide-react';
 import cardImage from '../assets/card-image2.png';
 
 const SimonCard: React.FC = () => {
     return (
-        <section className="w-full px-[10%] py-8 flex justify-center">
+        <section className="w-full px-[10%] max-md:px-4 py-8 max-md:py-0 flex justify-center">
             {/* Embedded styles for custom animations */}
             <style>
                 {`
@@ -25,7 +26,7 @@ const SimonCard: React.FC = () => {
                 `}
             </style>
 
-            <div className="relative w-full min-h-[600px] rounded-[24px] bg-transparent border border-[rgba(192,192,192,0.6)] border-t-[rgba(224,224,224,0.8)] border-l-[rgba(224,224,224,0.8)] shadow-[0_25px_50px_rgba(0,0,0,0.5)] overflow-hidden transition-all duration-300 flex items-stretch justify-between p-0 max-md:flex-col max-md:p-10 max-md:text-center max-md:h-auto">
+            <div className="relative w-full min-h-[600px] rounded-[24px] bg-transparent border border-[rgba(192,192,192,0.6)] border-t-[rgba(224,224,224,0.8)] border-l-[rgba(224,224,224,0.8)] shadow-[0_25px_50px_rgba(0,0,0,0.5)] overflow-hidden transition-all duration-300 flex items-stretch justify-between p-0 max-md:block max-md:relative max-md:p-4 max-md:h-auto max-md:min-h-[380px]">
 
                 {/* Noise Texture */}
                 <div
@@ -54,38 +55,41 @@ const SimonCard: React.FC = () => {
                     style={{ animation: 'pulse-custom 5s infinite alternate' }}
                 ></div>
 
-                <div className="flex-1 z-[3] max-w-[55%] p-[30px_50px_50px_50px] max-md:max-w-full max-md:mb-10 max-md:p-5 flex flex-col justify-center">
-                    <div className="flex flex-col items-start max-md:items-center max-md:text-center">
-                        <h2 className="font-playfair text-4xl md:text-6xl font-bold tracking-[-0.5px] mb-4 bg-gradient-to-b from-white via-white to-[#A0B0C0] bg-clip-text text-transparent drop-shadow-[0_0_30px_rgba(0,200,255,0.2)] leading-[1.05]">
+                <div className="relative flex-1 z-[20] max-w-[55%] p-[30px_50px_50px_50px] max-md:max-w-[60%] max-md:p-2 flex flex-col justify-center max-md:justify-start max-md:mt-4">
+                    <div className="flex flex-col items-start max-md:items-start max-md:w-full">
+                        <h2 className="font-playfair text-3xl md:text-6xl font-bold tracking-[-0.5px] mb-3 bg-gradient-to-b from-white via-white to-[#A0B0C0] bg-clip-text text-transparent drop-shadow-[0_0_30px_rgba(0,200,255,0.2)] leading-[1.1] max-md:text-[22px] max-md:mb-2">
                             Meet Simon, Your Creative Artist.
                         </h2>
-                        <h3 className="font-montserrat text-[24px] leading-[1.4] text-white/95 mb-5 font-medium">
+                        <h3 className="font-montserrat text-[16px] md:text-[24px] leading-[1.4] text-white/95 mb-5 font-medium max-md:max-w-[95%] max-md:text-[11px] max-md:mb-3">
                             Simon is a creative genius who brings your ideas to life automatically.
                         </h3>
-                        <ul className="list-none p-0 m-[0_0_24px_0] max-md:pl-0 max-md:list-inside">
-                            <li className="font-montserrat text-[18px] leading-[1.5] text-white/90 mb-2.5 pl-7 relative font-normal max-md:pl-0 max-md:flex max-md:flex-col max-md:items-center">
-                                <span className="absolute left-0 text-[#4169E1] text-[28px] leading-none -top-1 max-md:static max-md:mb-1">•</span>
-                                Designs stunning visuals and branding assets instantly.
+                        <ul className="list-none p-0 m-[0_0_24px_0] max-md:flex max-md:flex-col max-md:gap-1.5 max-md:mb-4">
+                            <li className="font-montserrat md:text-[18px] text-[14px] leading-[1.5] text-white/90 relative font-normal max-md:flex max-md:items-center max-md:gap-2 max-md:bg-white/5 max-md:border max-md:border-white/10 max-md:rounded-full max-md:px-2.5 max-md:py-1 max-md:w-fit max-md:text-[10px] md:pl-7 md:mb-2.5">
+                                <CheckCircle className="text-[#4169E1] w-5 h-5 flex-shrink-0 md:hidden max-md:w-3.5 max-md:h-3.5" />
+                                <span className="hidden md:block absolute left-0 text-[#4169E1] text-[28px] leading-none -top-1">•</span>
+                                Designs stunning visuals and branding assets<span className="hidden md:inline"> instantly</span>.
                             </li>
-                            <li className="font-montserrat text-[18px] leading-[1.5] text-white/90 mb-2.5 pl-7 relative font-normal max-md:pl-0 max-md:flex max-md:flex-col max-md:items-center">
-                                <span className="absolute left-0 text-[#4169E1] text-[28px] leading-none -top-1 max-md:static max-md:mb-1">•</span>
-                                Automates creative workflows and content generation.
+                            <li className="font-montserrat md:text-[18px] text-[14px] leading-[1.5] text-white/90 relative font-normal max-md:flex max-md:items-center max-md:gap-2 max-md:bg-white/5 max-md:border max-md:border-white/10 max-md:rounded-full max-md:px-2.5 max-md:py-1 max-md:w-fit max-md:text-[10px] md:pl-7 md:mb-2.5">
+                                <CheckCircle className="text-[#4169E1] w-5 h-5 flex-shrink-0 md:hidden max-md:w-3.5 max-md:h-3.5" />
+                                <span className="hidden md:block absolute left-0 text-[#4169E1] text-[28px] leading-none -top-1">•</span>
+                                Automates creative workflows and content<span className="hidden md:inline"> generation</span>.
                             </li>
-                            <li className="font-montserrat text-[18px] leading-[1.5] text-white/90 mb-2.5 pl-7 relative font-normal max-md:pl-0 max-md:flex max-md:flex-col max-md:items-center">
-                                <span className="absolute left-0 text-[#4169E1] text-[28px] leading-none -top-1 max-md:static max-md:mb-1">•</span>
-                                Manages brand consistency across all platforms 24/7.
+                            <li className="font-montserrat md:text-[18px] text-[14px] leading-[1.5] text-white/90 relative font-normal max-md:flex max-md:items-center max-md:gap-2 max-md:bg-white/5 max-md:border max-md:border-white/10 max-md:rounded-full max-md:px-2.5 max-md:py-1 max-md:w-fit max-md:text-[10px] md:pl-7 md:mb-2.5">
+                                <CheckCircle className="text-[#4169E1] w-5 h-5 flex-shrink-0 md:hidden max-md:w-3.5 max-md:h-3.5" />
+                                <span className="hidden md:block absolute left-0 text-[#4169E1] text-[28px] leading-none -top-1">•</span>
+                                Manages brand consistency <span className="hidden md:inline">across all platforms </span>24/7.
                             </li>
                         </ul>
-                        <div>
-                            <button suppressHydrationWarning className="bg-gradient-to-b from-white to-[#D0D0D0] text-black py-4 px-9 rounded-xl border border-white/80 text-[16px] font-bold font-montserrat cursor-pointer transition-all duration-300 uppercase tracking-[0.5px] shadow-[inset_0_1px_0_rgba(255,255,255,0.9),0_5px_15px_rgba(0,0,0,0.3)] hover:bg-gradient-to-b hover:from-white hover:to-[#E0E0E0] hover:-translate-y-0.5 hover:shadow-none">
+                        <div className="relative z-[50]">
+                            <button suppressHydrationWarning className="bg-gradient-to-b from-white to-[#D0D0D0] text-black py-3 md:py-4 px-6 md:px-9 rounded-xl border border-white/80 text-[14px] md:text-[16px] font-bold font-montserrat cursor-pointer transition-all duration-300 uppercase tracking-[0.5px] shadow-[inset_0_1px_0_rgba(255,255,255,0.9),0_5px_15px_rgba(0,0,0,0.3)] hover:bg-gradient-to-b hover:from-white hover:to-[#E0E0E0] hover:-translate-y-0.5 hover:shadow-none w-full md:w-auto max-md:py-2.5 max-md:px-4 max-md:text-[11px] max-md:rounded-lg">
                                 CREATE YOUR CREATIVE ARTIST
                             </button>
                         </div>
                     </div>
                 </div>
-                <div className="flex-1 z-[3] flex justify-end items-end h-full pr-[30px] max-md:justify-center max-md:w-full max-md:mt-10 max-md:pr-0">
+                <div className="flex-1 z-[3] flex justify-end items-end h-full pr-[30px] max-md:absolute max-md:bottom-0 max-md:right-0 max-md:w-[60%] max-md:pr-0">
                     {/* Using Next.js Image for optimization */}
-                    <Image src={cardImage} alt="Creative Artist Interface" className="w-[88%] h-auto max-md:max-w-full" unoptimized />
+                    <Image src={cardImage} alt="Creative Artist Interface" className="w-[88%] h-auto max-md:w-full" unoptimized />
                 </div>
             </div>
         </section>

@@ -45,15 +45,15 @@ const services = [
 
 export default function ServicesList() {
   return (
-    <section className="w-full py-20 px-4 md:px-8 relative">
+    <section className="w-full py-10 md:py-20 px-[5%] md:px-[10%] relative">
         <div className="max-w-6xl mx-auto">
             {services.map((service, index) => (
                 <div key={index}>
-                    <div className="group relative py-16">
+                    <div className="group relative py-8 md:py-16">
                         {/* Glassy Background Glow */}
                         <div className="absolute -inset-4 bg-gradient-to-r from-blue-500/5 to-purple-500/5 rounded-3xl blur-xl opacity-0 group-hover:opacity-100 transition-opacity duration-700" />
                         
-                        <div className="relative flex flex-col md:flex-row items-center md:items-start gap-8 md:gap-12">
+                        <div className="relative flex flex-col md:flex-row items-center md:items-start gap-[30px]">
                             {/* Icon Side */}
                             <div className="relative shrink-0">
                                 <div className="w-32 h-32 md:w-40 md:h-40 relative z-10 drop-shadow-[0_0_15px_rgba(255,255,255,0.1)] transition-transform duration-500 group-hover:scale-110">
