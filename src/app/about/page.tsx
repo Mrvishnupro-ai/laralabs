@@ -2,8 +2,17 @@ import Navbar from "@/components/Navbar";
 import Link from "next/link";
 import Image from "next/image";
 import { ArrowUpRight, ArrowRight, Sparkles, Zap } from "lucide-react";
-import founderImg from "@/assets/services-cards/founder.jpg";
-import businessImg from "@/assets/services-cards/business.jpg";
+import img1 from "@/assets/about/1.png";
+import img2 from "@/assets/about/2.png";
+import glassEl1 from "@/assets/glass-elements/1.png";
+import glassEl2 from "@/assets/glass-elements/4.png";
+import type { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "About Us",
+  description: "Learn how Lara Labs AI is building the workforce of the future with intelligent digital workers and methodical precision.",
+};
+
 
 export default function AboutPage() {
   return (
@@ -25,20 +34,20 @@ export default function AboutPage() {
               <p className="text-lg md:text-xl text-blue-100/80 mb-8 md:mb-10 max-w-md leading-relaxed font-light">
                 Intelligent digital workers that automate complex workflows, so you can focus on what matters.
               </p>
-              <div className="flex flex-row items-center gap-3 md:gap-6">
+              <div className="flex flex-col md:flex-row items-center gap-4 md:gap-6 w-full md:w-auto">
                 <Link 
-                  href="/join" 
-                  className="group relative inline-flex items-center gap-2 px-4 py-2.5 md:px-8 md:py-4 bg-white text-black hover:bg-gray-200 text-xs md:text-base font-bold rounded-full transition-all hover:scale-105 active:scale-95"
+                  href="/contact" 
+                  className="group relative inline-flex items-center justify-center gap-2 px-6 py-3 md:px-8 md:py-4 bg-white text-black hover:bg-gray-200 text-sm md:text-base font-bold rounded-full transition-all hover:scale-105 active:scale-95 w-full md:w-auto"
                 >
                   Start Automating
                   <ArrowUpRight size={16} className="group-hover:rotate-45 transition-transform duration-300"/>
                 </Link>
                 <Link 
                   href="/services" 
-                  className="text-gray-400 hover:text-white font-medium text-xs md:text-lg flex items-center gap-2 transition-colors group px-2 py-2"
+                  className="group relative inline-flex items-center justify-center gap-2 px-6 py-3 md:px-4 md:py-2 text-white border border-white/20 hover:bg-white/10 hover:border-white/40 text-sm md:text-lg font-medium rounded-full transition-all w-full md:w-auto md:border-none md:bg-transparent"
                 >
                   Explore our services
-                  <ArrowRight size={16} className="group-hover:translate-x-1 transition-transform opacity-0 group-hover:opacity-100"/>
+                  <ArrowRight size={16} className="group-hover:translate-x-1 transition-transform"/>
                 </Link>
               </div>
             </div>
@@ -68,28 +77,27 @@ export default function AboutPage() {
                 {/* Column 1 */}
                 <div className="flex flex-col gap-4">
                     {/* 3. White Metric (Short) */}
-                    <div className="bg-gradient-to-br from-white/10 to-gray-400/10 backdrop-blur-md border border-white/10 md:border-none md:bg-[#e4e4e7] p-4 md:p-6 rounded-[1.5rem] md:rounded-[2rem] h-auto aspect-square md:aspect-auto md:h-[200px] flex flex-col justify-between relative overflow-hidden group hover:brightness-110 transition-all">
-                        <div className="w-8 h-8 md:w-10 md:h-10 rounded-full bg-white/10 md:bg-white flex items-center justify-center shadow-sm">
-                            <Zap size={16} className="text-white md:text-black" />
-                        </div>
-                        <div>
-                             <h3 className="text-xl md:text-3xl font-bold text-white md:text-black mb-1">100+</h3>
-                             <p className="text-gray-300 md:text-black/70 text-[10px] md:text-sm font-semibold leading-tight">Digital Workers Deployed</p>
+                    {/* 3. White Metric (Short) - Glassy */}
+                    <div className="bg-gradient-to-br from-white/10 to-white/5 backdrop-blur-xl border border-white/20 p-4 md:p-6 rounded-[1.5rem] md:rounded-[2rem] h-auto aspect-square md:aspect-auto md:h-[200px] flex flex-col justify-between relative overflow-hidden group hover:bg-white/10 transition-all shadow-[0_8px_32px_0_rgba(31,38,135,0.1)]">
+                        <div className="absolute inset-0 bg-gradient-to-br from-white/20 to-transparent opacity-50 pointer-events-none" />
+                        <Image src={glassEl1} alt="Icon" width={58} height={58} className="z-10 object-contain mb-2" />
+                        <div className="z-10">
+                             <h3 className="text-xl md:text-3xl font-bold text-white mb-1">100+</h3>
+                             <p className="text-blue-100/70 text-[10px] md:text-sm font-semibold leading-tight">Digital Workers Deployed</p>
                         </div>
                     </div>
 
                     {/* 2. Orange Image (Tall) */}
-                    <div className="hidden md:block relative rounded-[1.5rem] md:rounded-[2rem] overflow-hidden h-[300px] md:h-[420px] group border border-white/5">
-                        <div className="absolute inset-0 bg-gradient-to-br from-slate-800 to-gray-900 z-0" />
-                        {/* Simulated Image Content */}
+                    {/* 2. Image Card (Tall) - No Filters */}
+                    <div className="hidden md:block relative rounded-[1.5rem] md:rounded-[2rem] overflow-hidden h-[300px] md:h-[420px] group border border-white/10 shadow-2xl">
                         <Image 
-                            src={businessImg} 
+                            src={img1} 
                             alt="Process" 
                             fill 
-                            className="object-cover mix-blend-overlay opacity-60 grayscale group-hover:scale-110 transition-transform duration-700" 
+                            className="object-cover group-hover:scale-105 transition-transform duration-700" 
                         />
-                         <div className="absolute inset-x-0 bottom-0 p-6 bg-gradient-to-t from-black/80 to-transparent">
-                            <p className="text-white font-bold text-lg leading-tight">Complex Logic Handling</p>
+                         <div className="absolute inset-x-0 bottom-0 p-6 bg-gradient-to-t from-black/60 to-transparent z-10">
+                            <p className="text-white font-bold text-lg leading-tight drop-shadow-md">Complex Logic Handling</p>
                         </div>
                     </div>
                 </div>
@@ -97,28 +105,25 @@ export default function AboutPage() {
                 {/* Column 2 */}
                 <div className="flex flex-col gap-4">
                      {/* 4. Blue Image (Tall) */}
-                    <div className="hidden md:block relative rounded-[1.5rem] md:rounded-[2rem] overflow-hidden h-[300px] md:h-[420px] group border border-white/5">
-                         {/* Fallback color/image */}
-                         <div className="absolute inset-0 bg-blue-600" />
+                     {/* 4. Image Card (Tall) - No Filters */}
+                    <div className="hidden md:block relative rounded-[1.5rem] md:rounded-[2rem] overflow-hidden h-[300px] md:h-[420px] group border border-white/10 shadow-2xl">
                          <Image 
-                            src={founderImg} 
+                            src={img2} 
                             alt="Founder" 
                             fill 
-                            className="object-cover group-hover:scale-110 transition-transform duration-700" 
+                            className="object-cover group-hover:scale-105 transition-transform duration-700" 
                         />
-                         {/* Glossy Overlay */}
-                         <div className="absolute inset-0 bg-gradient-to-t from-blue-900/60 via-transparent to-transparent opacity-80" />
                     </div>
 
                     {/* 6. Dark Metric (Short) */}
                      {/* 6. Dark Metric (Short) */}
-                     <div className="bg-gradient-to-br from-blue-500/20 to-blue-700/20 backdrop-blur-md border border-blue-500/20 md:border-white/10 p-4 md:p-6 rounded-[1.5rem] md:rounded-[2rem] h-auto aspect-square md:aspect-auto md:h-[200px] flex flex-col justify-between relative overflow-hidden group hover:border-white/20 transition-colors">
-                        <div className="w-8 h-8 md:w-10 md:h-10 rounded-full bg-white/10 flex items-center justify-center border border-white/10">
-                            <Sparkles size={16} className="text-white" />
-                        </div>
-                        <div>
+                     {/* 6. Dark Metric (Short) - Glassy */}
+                     <div className="bg-gradient-to-br from-white/10 to-white/5 backdrop-blur-xl border border-white/20 p-4 md:p-6 rounded-[1.5rem] md:rounded-[2rem] h-auto aspect-square md:aspect-auto md:h-[200px] flex flex-col justify-between relative overflow-hidden group hover:bg-white/10 transition-all shadow-[0_8px_32px_0_rgba(31,38,135,0.1)]">
+                         <div className="absolute inset-0 bg-gradient-to-br from-white/20 to-transparent opacity-50 pointer-events-none" />
+                        <Image src={glassEl2} alt="Icon" width={58} height={58} className="z-10 object-contain mb-2" />
+                        <div className="z-10">
                              <h3 className="text-xl md:text-3xl font-bold text-white mb-1">500+</h3>
-                             <p className="text-gray-400 text-[10px] md:text-sm font-medium leading-tight">Work hours saved for teams</p>
+                             <p className="text-blue-100/70 text-[10px] md:text-sm font-medium leading-tight">Work hours saved for teams</p>
                         </div>
                     </div>
                 </div>
@@ -166,7 +171,7 @@ export default function AboutPage() {
                 <h2 className="text-2xl md:text-5xl font-bold text-white mb-4 md:mb-6">Methodical Precision.</h2>
                 <div className="prose prose-invert prose-lg text-gray-400 leading-relaxed font-light space-y-4">
                   <p>
-                    We don't just "add AI" to your business. We deconstruct your entire operation, identify the bottlenecks, and engineer custom digital workers to handle them.
+                    We don&apos;t just &quot;add AI&quot; to your business. We deconstruct your entire operation, identify the bottlenecks, and engineer custom digital workers to handle them.
                   </p>
                 </div>
              </div>
@@ -225,7 +230,7 @@ export default function AboutPage() {
             {/* Right: Vision Quote */}
             <div className="flex flex-col justify-center items-center lg:items-start text-center lg:text-left relative pl-0 lg:pl-10 lg:border-l border-white/10">
                 <div className="relative max-w-xl">
-                <span className="absolute -top-12 -left-4 text-9xl text-white/5 font-serif font-bold -z-10 select-none">"</span>
+                <span className="absolute -top-12 -left-4 text-9xl text-white/5 font-serif font-bold -z-10 select-none">&quot;</span>
                 <p className="text-2xl md:text-4xl font-medium text-white leading-tight mb-8 drop-shadow-lg pt-4">
                     The future belongs to those who collaborate with intelligence, not those who compete with it.
                 </p>
@@ -248,7 +253,7 @@ export default function AboutPage() {
              Ready to evolve?
           </h2>
           <p className="text-base md:text-xl text-blue-100/70 mb-8 md:mb-12 max-w-lg font-light">
-            Stop wasting time on the mundane. Let's build your workforce of tomorrow.
+            Stop wasting time on the mundane. Let&apos;s build your workforce of tomorrow.
           </p>
           
           <Link 

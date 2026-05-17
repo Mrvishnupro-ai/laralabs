@@ -15,10 +15,40 @@ const Footer = () => {
 
     const socialLinks = [
         { name: "Twitter", icon: Twitter, href: "https://x.com/laralabs_ai" },
-        { name: "Instagram", icon: Instagram, href: "#" },
-        { name: "LinkedIn", icon: Linkedin, href: "#" },
+        { name: "Instagram", icon: Instagram, href: "https://www.instagram.com/laralabs_ai/" },
+        { name: "LinkedIn", icon: Linkedin, href: "http://linkedin.com/company/laralabs-ai" },
         { name: "YouTube", icon: Youtube, href: "#" }
     ];
+
+    const [email, setEmail] = React.useState('');
+    const [status, setStatus] = React.useState<'idle' | 'loading' | 'success' | 'error'>('idle');
+
+    const handleJoin = async () => {
+        if (!email) return;
+        setStatus('loading');
+        try {
+            // Replace with your actual Google Apps Script Web App URL
+            // Example: https://script.google.com/macros/s/DEPLOYMENT_ID/exec
+            const GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbx9Rp_5jlI3lK-lzFDOsfJwnoj1K_oImB_zdIzDxje7Nnq7y8l09uPsEGS90BZNoPBs/exec';
+            
+            await fetch(GOOGLE_SCRIPT_URL, {
+                method: 'POST',
+                mode: 'no-cors',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ email }),
+            });
+
+            setStatus('success');
+            setEmail('');
+            setTimeout(() => setStatus('idle'), 3000);
+        } catch (error) {
+            console.error('Error joining community:', error);
+            setStatus('error');
+            setTimeout(() => setStatus('idle'), 3000);
+        }
+    };
 
     return (
         <footer className="relative w-full bg-[#050505]/60 backdrop-blur-md border-t border-white/10 pt-8 overflow-hidden flex flex-col justify-between">
@@ -51,7 +81,7 @@ const Footer = () => {
                         <div className="mt-2">
                             <h3 className="text-3xl md:text-6xl font-semibold text-white leading-[1.1]">
                                 Ready to scale your <br />
-                                Business?
+                                <span className="text-blue-500">Business?</span>
                             </h3>
                         </div>
 
@@ -88,10 +118,20 @@ const Footer = () => {
                                 <input 
                                     type="email" 
                                     placeholder="Enter your email" 
+                                    value={email}
+                                    onChange={(e) => setEmail(e.target.value)}
+                                    suppressHydrationWarning
                                     className="flex-1 h-12 md:h-14 rounded-xl bg-white/5 border border-white/10 px-6 text-white placeholder:text-zinc-600 focus:outline-none focus:border-blue-500 focus:bg-white/10 transition-all min-w-0"
                                 />
-                                <button className="h-12 md:h-14 px-6 md:px-8 rounded-xl bg-blue-600 hover:bg-blue-500 text-white font-bold transition-all shadow-[0_0_15px_rgba(37,99,235,0.4)] whitespace-nowrap">
-                                    Join
+                                <button 
+                                    onClick={handleJoin}
+                                    disabled={status === 'loading'}
+                                    suppressHydrationWarning 
+                                    className={`h-12 md:h-14 px-6 md:px-8 rounded-xl font-bold transition-all shadow-[0_0_15px_rgba(37,99,235,0.4)] whitespace-nowrap ${
+                                        status === 'success' ? 'bg-green-600 hover:bg-green-500 text-white' : 'bg-blue-600 hover:bg-blue-500 text-white'
+                                    }`}
+                                >
+                                    {status === 'loading' ? '...' : status === 'success' ? 'Joined!' : 'Join'}
                                 </button>
                             </div>
                         </div>
@@ -133,7 +173,7 @@ const Footer = () => {
 
             {/* Massive Background Text Effect - Positioned BELOW the line occupying space */}
             <div className="w-full flex justify-center py-4 bg-transparent">
-                <h1 className="text-[17vw] font-black text-blue-900/20 text-center leading-none tracking-tighter whitespace-nowrap select-none">
+                <h1 className="text-[17vw] font-black bg-gradient-to-b from-white/20 via-white/10 to-transparent bg-clip-text text-transparent text-center leading-none tracking-tighter whitespace-nowrap select-none">
                     LARA LABS AI
                 </h1>
             </div>

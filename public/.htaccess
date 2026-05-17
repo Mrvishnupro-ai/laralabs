@@ -1,0 +1,54 @@
+<IfModule mod_rewrite.c>
+  Options +FollowSymLinks -MultiViews
+  RewriteEngine On
+  RewriteBase /
+
+  # ----------------------------------------------------------------------
+  # 1. DISABLE DIRECTORY SLASHES (CRITICAL FIX)
+  # ----------------------------------------------------------------------
+  # Next.js creates both a file (contact.html) and a folder (contact/).
+  # By default, Apache sees the folder and forces a redirect to /contact/.
+  # We disable this behavior so we can serve the file instead.
+  DirectorySlash Off
+
+  # ----------------------------------------------------------------------
+  # 2. FIX TRAILING SLASHES (Redirect /page/ -> /page)
+  # ----------------------------------------------------------------------
+  # If the user is at /contact/, redirect them back to /contact
+  # This fixes the issue where the browser might have cached a previous bad redirect.
+  RewriteCond %{REQUEST_FILENAME} -d
+  RewriteCond %{DOCUMENT_ROOT}/$1.html -f
+  RewriteRule ^(.*)/$ /$1 [R=301,L]
+
+  # ----------------------------------------------------------------------
+  # 3. REMOVE .html EXTENSION (Redirect /page.html -> /page)
+  # ----------------------------------------------------------------------
+  RewriteCond %{THE_REQUEST} \s/+(.+?)\.html[\s?] [NC]
+  RewriteRule ^ /%1 [R=301,L]
+
+  # ----------------------------------------------------------------------
+  # 4. SERVE THE CONTENT (Map /page -> /page.html)
+  # ----------------------------------------------------------------------
+  # If the request matches a .html file, serve that file.
+  RewriteCond %{DOCUMENT_ROOT}/$1.html -f
+  RewriteRule ^(.+?)/?$ $1.html [L]
+
+  # ----------------------------------------------------------------------
+  # 5. ERROR PAGES
+  # ----------------------------------------------------------------------
+  ErrorDocument 404 /404.html
+</IfModule>
+
+# Disable directory browsing
+Options -Indexes
+
+# Browser Caching
+<IfModule mod_expires.c>
+  ExpiresActive On
+  ExpiresByType image/jpg "access plus 1 year"
+  ExpiresByType image/jpeg "access plus 1 year"
+  ExpiresByType image/png "access plus 1 year"
+  ExpiresByType image/webp "access plus 1 year"
+  ExpiresByType text/css "access plus 1 month"
+  ExpiresByType text/javascript "access plus 1 month"
+</IfModule>

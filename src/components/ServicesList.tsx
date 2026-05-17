@@ -3,18 +3,21 @@ import Image from 'next/image';
 import { Check } from 'lucide-react';
 
 import glass1 from "../assets/glass-elements/1.png";
-import glass2 from "../assets/glass-elements/2.png";
+import glass2 from "../assets/glass-elements/6.png";
 import glass3 from "../assets/glass-elements/3.png";
 
 const services = [
   {
-    icon: glass1,
-    title: "Content Creation & AI Content Generation",
-    description: "Turn ideas into content. On autopilot.",
+    icon: glass3,
+    title: "AI Automation & Custom AI Development",
+    description: "Let AI handle repetitive work while you scale.",
     features: [
-      "Blogs & articles for your business",
-      "Short video scripts (Reels, Shorts, Ads)",
-      "Posters & visuals (AI + human polish)"
+      "AI chatbots for sales & support",
+      "Custom AI agents trained on your data",
+      "Website & landing page development",
+      "Workflow automation (n8n & custom flows)",
+      "AI content systems (input → auto output)",
+      "Voice agents & call automation"
     ]
   },
   {
@@ -29,16 +32,13 @@ const services = [
     ]
   },
   {
-    icon: glass3,
-    title: "AI Automation & Custom AI Development",
-    description: "Let AI handle repetitive work while you scale.",
+    icon: glass1,
+    title: "Content Creation & AI Content Generation",
+    description: "Turn ideas into content. On autopilot.",
     features: [
-      "AI chatbots for sales & support",
-      "Custom AI agents trained on your data",
-      "Website & landing page development",
-      "Workflow automation (n8n & custom flows)",
-      "AI content systems (input → auto output)",
-      "Voice agents & call automation"
+      "Blogs & articles for your business",
+      "Short video scripts (Reels, Shorts, Ads)",
+      "Posters & visuals (AI + human polish)"
     ]
   }
 ];

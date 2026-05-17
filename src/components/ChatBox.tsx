@@ -2,7 +2,9 @@
 
 import React, { useState } from "react";
 import { Send } from "lucide-react";
-import ChatModal from "./ChatModal";
+import dynamic from "next/dynamic";
+
+const ChatModal = dynamic(() => import("./ChatModal"), { ssr: false });
 
 export default function ChatBox() {
   const [message, setMessage] = useState("");
@@ -14,6 +16,7 @@ export default function ChatBox() {
     setIsModalOpen(true);
   };
 
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const handleModalSubmit = (formData: any) => {
     console.log("Full Request:", {
       message,
@@ -49,10 +52,12 @@ export default function ChatBox() {
           value={message}
           onChange={(e) => setMessage(e.target.value)}
           placeholder="Talk to our Expert to know how we can help you "
+          suppressHydrationWarning
           className="flex-1 bg-transparent border-none outline-none text-white placeholder:text-gray-400 px-3 md:px-4 text-xs md:text-lg w-full h-full"
         />
         <button
           type="submit"
+          suppressHydrationWarning
           className="relative h-10 md:h-12 px-4 md:px-6 rounded-lg md:rounded-xl bg-gradient-to-b from-gray-100 to-gray-300 text-gray-900 font-bold shadow-[0px_2px_0px_0px_#9ca3af,inset_0px_1px_0px_0px_rgba(255,255,255,1)] hover:brightness-105 active:translate-y-[2px] active:shadow-none transition-all flex items-center gap-2 text-xs md:text-base"
         >
           <span className="drop-shadow-sm">Send</span>

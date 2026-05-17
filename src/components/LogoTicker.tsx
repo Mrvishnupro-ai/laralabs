@@ -1,6 +1,5 @@
-
 import React from "react";
-import Image from "next/image";
+import Image from "next-image-export-optimizer";
 
 // Importing logos
 import logo2 from "@/assets/scroll_logos/2.png";

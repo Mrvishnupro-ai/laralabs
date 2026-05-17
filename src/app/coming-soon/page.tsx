@@ -183,7 +183,7 @@ export default function ComingSoon() {
                     animate={{ opacity: 1, scale: 1 }}
                     transition={{ duration: 0.6, delay: 0.6 }}
                     onSubmit={handleSubmit}
-                    className="flex flex-col sm:flex-row items-center p-1.5 gap-2 w-full max-w-md bg-white/5 backdrop-blur-2xl rounded-full border border-white/10 hover:border-white/20 transition-all group focus-within:border-white/30"
+                    className="flex flex-col sm:flex-row items-center p-2 sm:p-1.5 gap-3 sm:gap-2 w-full max-w-md bg-white/5 backdrop-blur-2xl rounded-3xl sm:rounded-full border border-white/10 hover:border-white/20 transition-all group focus-within:border-white/30"
                 >
                     <input
                         type="email"

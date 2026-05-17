@@ -1,13 +1,30 @@
 "use client";
 
 import Link from "next/link";
-import Image from "next/image";
+import Image from "next-image-export-optimizer";
 import React, { useState } from "react";
-import { Menu, X } from "lucide-react";
+import { Menu, X, MessageCircle } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
+import { useChatReady } from "./ChatWidget";
+import dynamic from "next/dynamic";
+
+const ChatModal = dynamic(() => import("./ChatModal"), { ssr: false });
 
 export default function Navbar() {
     const [isOpen, setIsOpen] = useState(false);
+    const hasChatted = useChatReady();
+    const [isChatOpen, setIsChatOpen] = useState(false);
+
+    React.useEffect(() => {
+        const event = new CustomEvent("navbar-toggle", { detail: { isOpen } });
+        window.dispatchEvent(event);
+        
+        if (isOpen) {
+            document.body.style.overflow = "hidden";
+        } else {
+            document.body.style.overflow = "unset";
+        }
+    }, [isOpen]);
 
     const navItems = [
         { name: "Home", href: "/" },
@@ -19,76 +36,97 @@ export default function Navbar() {
     ];
 
     return (
-        <nav className="fixed w-full z-[100] top-0 left-0 bg-transparent backdrop-blur-sm border-b border-white/10">
-            <div className="w-full px-[5%] md:px-[10%] h-16 md:h-20 flex items-center justify-between">
-                <div className="flex-shrink-0 z-[101]">
-                    <Link href="/" className="block" onClick={() => setIsOpen(false)}>
-                        <Image
-                            src="/logo.png"
-                            alt="Logo"
-                            width={120}
-                            height={40}
-                            className="h-8 md:h-10 w-auto object-contain"
-                            priority
-                        />
-                    </Link>
-                </div>
-
-                {/* Desktop Menu */}
-                <div className="hidden md:block">
-                    <div className="flex items-center space-x-8">
-                        {navItems.map((item) => (
-                            <Link
-                                key={item.name}
-                                href={item.href}
-                                className="text-sm font-medium text-gray-300 hover:text-white transition-colors"
-                            >
-                                {item.name}
-                            </Link>
-                        ))}
+        <>
+            <nav className="fixed w-full z-[100] top-0 left-0 bg-transparent backdrop-blur-sm border-b border-white/10">
+                <div className="w-full px-[5%] md:px-[10%] h-16 md:h-20 flex items-center justify-between">
+                    <div className="flex-shrink-0 z-[101]">
+                        <Link href="/" className="block" onClick={() => setIsOpen(false)}>
+                            <Image
+                                src="/logo.png"
+                                alt="Logo"
+                                width={120}
+                                height={40}
+                                className="h-8 md:h-10 w-auto object-contain"
+                                priority
+                            />
+                        </Link>
                     </div>
-                </div>
 
-                {/* Mobile Menu Button */}
-                <div className="md:hidden z-[101]">
-                    <button
-                        onClick={() => setIsOpen(!isOpen)}
-                        className="text-white focus:outline-none p-2"
-                    >
-                        {isOpen ? <X size={28} /> : <Menu size={28} />}
-                    </button>
-                </div>
-
-                {/* Mobile Menu Overlay */}
-                <AnimatePresence>
-                    {isOpen && (
-                        <motion.div
-                            initial={{ opacity: 0, y: -20 }}
-                            animate={{ opacity: 1, y: 0 }}
-                            exit={{ opacity: 0, y: -20 }}
-                            transition={{ duration: 0.3 }}
-                            className="fixed inset-0 bg-[#0a0a16]/95 backdrop-blur-xl z-[100] flex flex-col items-center justify-center space-y-8 md:hidden h-screen w-screen"
-                        >
-                            {navItems.map((item, index) => (
-                                <motion.div
+                    {/* Desktop Menu */}
+                    <div className="hidden md:block">
+                        <div className="flex items-center space-x-8">
+                            {navItems.map((item) => (
+                                <Link
                                     key={item.name}
-                                    initial={{ opacity: 0, y: 20 }}
-                                    animate={{ opacity: 1, y: 0 }}
-                                    transition={{ delay: 0.1 + index * 0.1 }}
+                                    href={item.href}
+                                    className="text-sm font-medium text-gray-300 hover:text-white transition-colors"
                                 >
-                                    <Link
-                                        href={item.href}
-                                        onClick={() => setIsOpen(false)}
-                                        className="text-3xl font-serif italic text-white hover:text-blue-400 transition-colors"
-                                    >
-                                        {item.name}
-                                    </Link>
-                                </motion.div>
+                                    {item.name}
+                                </Link>
                             ))}
-                        </motion.div>
-                    )}
-                </AnimatePresence>
-            </div>
-        </nav>
+
+                            {/* Chat button — visible only after user has chatted */}
+                            {hasChatted && (
+                                <button
+                                    onClick={() => setIsChatOpen(true)}
+                                    className="text-sm font-medium text-gray-300 hover:text-white transition-colors"
+                                >
+                                    Chat
+                                </button>
+                            )}
+                        </div>
+                    </div>
+
+                    {/* Mobile Menu Button */}
+                    <div className="md:hidden z-[101]">
+                        <button
+                            onClick={() => setIsOpen(!isOpen)}
+                            suppressHydrationWarning
+                            className="text-white focus:outline-none p-2"
+                        >
+                            {isOpen ? <X size={28} /> : <Menu size={28} />}
+                        </button>
+                    </div>
+
+                    {/* Mobile Menu Overlay */}
+                    <AnimatePresence>
+                        {isOpen && (
+                            <motion.div
+                                initial={{ opacity: 0, y: -20 }}
+                                animate={{ opacity: 1, y: 0 }}
+                                exit={{ opacity: 0, y: -20 }}
+                                transition={{ duration: 0.3 }}
+                                className="fixed inset-0 bg-[#0a0a16]/95 backdrop-blur-xl z-[100] flex flex-col items-center justify-center space-y-8 md:hidden h-screen w-screen"
+                            >
+                                {navItems.map((item, index) => (
+                                    <motion.div
+                                        key={item.name}
+                                        initial={{ opacity: 0, y: 20 }}
+                                        animate={{ opacity: 1, y: 0 }}
+                                        transition={{ delay: 0.1 + index * 0.1 }}
+                                    >
+                                        <Link
+                                            href={item.href}
+                                            onClick={() => setIsOpen(false)}
+                                            className="text-3xl font-serif italic text-white hover:text-blue-400 transition-colors"
+                                        >
+                                            {item.name}
+                                        </Link>
+                                    </motion.div>
+                                ))}
+                            </motion.div>
+                        )}
+                    </AnimatePresence>
+                </div>
+            </nav>
+
+            {/* Desktop Chat Modal (triggered from Navbar) */}
+            <ChatModal
+                isOpen={isChatOpen}
+                onClose={() => setIsChatOpen(false)}
+                initialMessage=""
+                onSubmit={() => setIsChatOpen(false)}
+            />
+        </>
     );
 }

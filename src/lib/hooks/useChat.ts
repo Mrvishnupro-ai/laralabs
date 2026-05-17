@@ -1,5 +1,6 @@
 import { useState, useCallback, useRef, useEffect } from 'react';
 import { ConversationMessage, UserContext, ChatResponse } from '@/lib/types/chat';
+import { OpenRouter } from "@openrouter/sdk";
 
 interface UseChatOptions {
   userContext: UserContext;
@@ -29,11 +30,28 @@ const saveMessageCount = (count: number) => {
   }
 };
 
+const getStoredMessages = (): ConversationMessage[] => {
+  if (typeof window === 'undefined') return [];
+  const stored = localStorage.getItem('laralabs_chat_history');
+  try {
+    return stored ? JSON.parse(stored) : [];
+  } catch (e) {
+    console.error('Failed to parse chat history', e);
+    return [];
+  }
+};
+
+const saveMessages = (messages: ConversationMessage[]) => {
+  if (typeof window !== 'undefined') {
+    localStorage.setItem('laralabs_chat_history', JSON.stringify(messages));
+  }
+};
+
 /**
  * Custom hook for managing chat interactions with streaming support
  */
 export function useChat({ userContext, onError, onLimitReached }: UseChatOptions): UseChatReturn {
-  const [messages, setMessages] = useState<ConversationMessage[]>([]);
+  const [messages, setMessages] = useState<ConversationMessage[]>(() => getStoredMessages());
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   
@@ -48,6 +66,11 @@ export function useChat({ userContext, onError, onLimitReached }: UseChatOptions
     setRemainingMessages(remaining);
     saveMessageCount(messageCount);
   }, [messageCount]);
+
+  // Save messages to localStorage whenever they change
+  useEffect(() => {
+    saveMessages(messages);
+  }, [messages]);
 
   const sendMessage = useCallback(async (message: string) => {
     if (!message.trim() || isLoading) return;
@@ -75,124 +98,100 @@ export function useChat({ userContext, onError, onLimitReached }: UseChatOptions
     // Create abort controller for this request
     abortControllerRef.current = new AbortController();
 
-    // Prepare AI message placeholder
-    let aiMessageContent = '';
-    const aiMessageIndex = messages.length + 1;
-
     try {
-      // Get last 2 messages for context (excluding the current one)
-      const conversationHistory = messages.slice(-2);
-
-      // Generate a session ID for this chat instance if one doesn't exist
-      let sessionId = sessionStorage.getItem('laralabs_session_id');
-      if (!sessionId) {
-        sessionId = Math.random().toString(36).substring(2) + Date.now().toString(36);
-        sessionStorage.setItem('laralabs_session_id', sessionId);
-      }
-
-      const response = await fetch('/api/chat', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'x-session-id': sessionId, // Pass session ID in headers
-        },
-        body: JSON.stringify({
-          message: message.trim(),
-          conversationHistory,
-          userContext
-        }),
-        signal: abortControllerRef.current.signal
+      const openrouter = new OpenRouter({
+        apiKey: process.env.NEXT_PUBLIC_OPENROUTER_API_KEY || ''
       });
 
-      if (!response.ok) {
-        if (response.status === 429) {
-          // Rate limit reached - trigger the popup without logging an error
-          onLimitReached?.(0);
-          setRemainingMessages(0);
-          return;
-        }
-        throw new Error(`Request failed with status ${response.status}`);
-      }
+      // Construct instructions (sent as user message since Gemma 4 free may not support system role)
+      const instructions = `[INSTRUCTIONS - Follow these for every response]
 
-      const reader = response.body?.getReader();
-      if (!reader) {
-        throw new Error('Response body is not readable');
-      }
+You are a website assistant for an AI automation agency.
+Your goals:
+1. Answer clearly in simple English, daily use english
+2. the response should feel that user got some value from it, it might be knowledge or service or italic font quote releated to business or ai.
+3. response should be customised based on the given inputs, Try to ellobrate the problem and propose a short solution for them
+4. Keep replies short and professional 180 to 200 tokens
+5. Every response maintain CTA {link : https://laralabs.in/contact}
+6. everytime respond in the most structured format like tables or bullets
+7. talk in numbers and results use %, no of hours, costs save make sure these should be achivible (mention less)
 
-      const decoder = new TextDecoder();
-      let buffer = '';
+### User Context (The Lead)
+- **Name**: ${userContext?.userName || 'Guest'}
+- **Industry**: ${userContext?.businessType || 'Unknown'}
+- **Team Size**: ${userContext?.teamSize || 'Unknown'}
+- **Key Challenge**: ${userContext?.keyProblem || 'Not specified'}
+
+At Hight level laralabs offer these services
+Business Automation & AI Agents
+Scalable Software Solutions
+Marketing Operations 
+AI Creatives & Content Systems
+
+If we go deeper we do chatbots, integration,RAG Systems, software devlopement...etc
+[END INSTRUCTIONS]
+`;
+
+      // Prepare messages for API (History + Current)
+      // Limit context to last 6 messages (approx 3 turns) as per k=3 requirement
+      const historyContext = messages.slice(-6).map(m => ({ 
+        role: m.role === 'ai' ? 'assistant' : 'user', 
+        content: m.content 
+      }));
+
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      const apiMessages: any[] = [
+        { role: 'user', content: instructions },
+        { role: 'assistant', content: 'Understood. I will follow these instructions for every response.' },
+        ...historyContext,
+        { role: 'user', content: message.trim() }
+      ];
 
       // Add empty AI message that will be updated with streaming content
       setMessages(prev => [...prev, { role: 'ai', content: '', timestamp: Date.now() }]);
+      
+      const stream = await openrouter.chat.send({
+        model: "google/gemma-4-26b-a4b-it:free",
+        messages: apiMessages,
+        stream: true
+      });
 
-      while (true) {
-        const { done, value } = await reader.read();
-        if (done) break;
+      let aiMessageContent = '';
 
-        buffer += decoder.decode(value, { stream: true });
-
-        // Process complete lines
-        let lineEnd: number;
-        while ((lineEnd = buffer.indexOf('\n')) !== -1) {
-          const line = buffer.slice(0, lineEnd).trim();
-          buffer = buffer.slice(lineEnd + 1);
-
-          if (!line || !line.startsWith('data: ')) continue;
-
-          const data = line.slice(6);
+      // Stream response following official OpenRouter reference pattern
+      for await (const chunk of stream) {
+        const content = chunk.choices[0]?.delta?.content;
+        
+        if (content) {
+          aiMessageContent += content;
           
-          try {
-            const parsed: ChatResponse = JSON.parse(data);
-
-            if (parsed.type === 'content' && parsed.content) {
-              aiMessageContent += parsed.content;
-              
-              // Update AI message with accumulated content
-              setMessages(prev => {
-                const newMessages = [...prev];
-                if (newMessages[aiMessageIndex]) {
-                  newMessages[aiMessageIndex] = {
-                    ...newMessages[aiMessageIndex],
-                    content: aiMessageContent
-                  };
-                }
-                return newMessages;
-              });
-            } else if (parsed.type === 'done') {
-              // Increment message count in localStorage
-              setMessageCount(prev => prev + 1);
-              
-              if (parsed.remainingMessages !== undefined) {
-                setRemainingMessages(parsed.remainingMessages);
-                onLimitReached?.(parsed.remainingMessages);
-              }
-            } else if (parsed.type === 'error') {
-              throw new Error(parsed.error || 'Stream error occurred');
+          setMessages(prev => {
+            const newMessages = [...prev];
+            const lastIdx = newMessages.length - 1;
+            if (newMessages[lastIdx] && newMessages[lastIdx].role === 'ai') {
+              newMessages[lastIdx] = {
+                ...newMessages[lastIdx],
+                content: aiMessageContent
+              };
             }
-          } catch (e) {
-            // Ignore JSON parse errors
-            if (e instanceof Error && !e.message.includes('JSON')) {
-              throw e;
-            }
-          }
+            return newMessages;
+          });
         }
       }
+
+      // Successful completion
+      setMessageCount(prev => prev + 1);
 
     } catch (err) {
-      if (err instanceof Error) {
-        if (err.name === 'AbortError') {
-          console.log('Request aborted');
-          return;
-        }
-        const errorMessage = err.message || 'Failed to send message';
-        setError(errorMessage);
-        onError?.(errorMessage);
-      }
+      console.error('Chat error:', err);
+      const errorMessage = err instanceof Error ? err.message : 'Failed to send message';
+      setError(errorMessage);
+      onError?.(errorMessage);
     } finally {
       setIsLoading(false);
       abortControllerRef.current = null;
     }
-  }, [messages, userContext, isLoading, onError, onLimitReached]);
+  }, [messages, userContext, isLoading, setError, onError, onLimitReached]);
 
   const resetChat = useCallback(() => {
     // Abort ongoing request if any
@@ -200,7 +199,8 @@ export function useChat({ userContext, onError, onLimitReached }: UseChatOptions
       abortControllerRef.current.abort();
     }
     
-    setMessages([]);
+    // Don't clear messages to preserve history
+    // setMessages([]); 
     setError(null);
     setIsLoading(false);
   }, []);

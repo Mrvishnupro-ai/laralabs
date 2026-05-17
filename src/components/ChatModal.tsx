@@ -2,9 +2,14 @@
 
 import React, { useState, useEffect, useRef } from "react";
 import { createPortal } from "react-dom";
-import Image from "next/image";
+import Image from "next-image-export-optimizer";
 import { motion, AnimatePresence } from "framer-motion";
 import { X, ChevronDown, Check, ArrowRight, Sparkles, Calendar, Zap, Bot, Box, Clock, LayoutGrid } from "lucide-react";
+import Link from "next/link";
+import compImage from "@/assets/cta/comp.png";
+import glass1 from "@/assets/glass-elements/1.png";
+import glass2 from "@/assets/glass-elements/2.png";
+import glass3 from "@/assets/glass-elements/3.png";
 import { useChat } from "@/lib/hooks/useChat";
 import { UserContext } from "@/lib/types/chat";
 import ReactMarkdown from "react-markdown";
@@ -14,6 +19,7 @@ interface ChatModalProps {
   isOpen: boolean;
   onClose: () => void;
   initialMessage: string;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   onSubmit: (data: any) => void;
 }
 
@@ -28,13 +34,13 @@ const TEAM_SIZES = [
 const SUGGESTION_CHIPS = [
     "How can you automate my business?",
     "What AI services do you offer?",
-    "Tell me about your pricing.",
+    "How does the free AI audit work?",
 ];
 
 const SERVICES = [
-    { icon: Bot, title: "Custom AI Chatbots", desc: "24/7 Support Agents" },
-    { icon: Zap, title: "Workflow Automation", desc: "Streamline Operations" },
-    { icon: Box, title: "LLM Integration", desc: "Custom Models & RAG" },
+    { img: glass1, title: "Custom AI Chatbots", desc: "24/7 Support Agents" },
+    { img: glass2, title: "Workflow Automation", desc: "Streamline Operations" },
+    { img: glass3, title: "LLM Integration", desc: "Custom Models & RAG" },
 ];
 
 export default function ChatModal({ isOpen, onClose, initialMessage, onSubmit }: ChatModalProps) {
@@ -44,13 +50,13 @@ export default function ChatModal({ isOpen, onClose, initialMessage, onSubmit }:
     businessType: "",
     teamSize: "",
     keyProblem: "",
-    primaryGoal: "",
     userQuery: "", 
   });
 
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const [mounted, setMounted] = useState(false);
+  const [isMobile, setIsMobile] = useState(false);
   
   // New State for Chat View
   const [view, setView] = useState<'form' | 'chat'>('form');
@@ -67,7 +73,7 @@ export default function ChatModal({ isOpen, onClose, initialMessage, onSubmit }:
     businessType: formData.businessType,
     teamSize: formData.teamSize,
     keyProblem: formData.keyProblem,
-    primaryGoal: formData.primaryGoal
+    primaryGoal: ""
   };
 
   const { messages, isLoading, error: chatError, remainingMessages, sendMessage, resetChat } = useChat({
@@ -83,8 +89,22 @@ export default function ChatModal({ isOpen, onClose, initialMessage, onSubmit }:
   });
 
   useEffect(() => {
+    if (remainingMessages === 0 && view === 'chat') {
+      // eslint-disable-next-line
+      setShowLimitPopup(true);
+    }
+  }, [remainingMessages, view]);
+
+  useEffect(() => {
+    // eslint-disable-next-line
     setMounted(true);
-    return () => setMounted(false);
+    const checkMobile = () => setIsMobile(window.innerWidth < 768);
+    checkMobile();
+    window.addEventListener('resize', checkMobile);
+    return () => {
+      setMounted(false);
+      window.removeEventListener('resize', checkMobile);
+    };
   }, []);
 
   const scrollToBottom = () => {
@@ -102,6 +122,7 @@ export default function ChatModal({ isOpen, onClose, initialMessage, onSubmit }:
       if (savedUserData) {
         try {
           const parsed = JSON.parse(savedUserData);
+          // eslint-disable-next-line
           setFormData(prev => ({
             ...prev,
             ...parsed
@@ -123,6 +144,7 @@ export default function ChatModal({ isOpen, onClose, initialMessage, onSubmit }:
         if (savedUserData) {
           try {
             const parsed = JSON.parse(savedUserData);
+            // eslint-disable-next-line
             setFormData(prev => ({
               ...prev,
               ...parsed,
@@ -173,7 +195,6 @@ export default function ChatModal({ isOpen, onClose, initialMessage, onSubmit }:
     if (!(formData.businessType || "").trim()) newErrors.businessType = "Business type is required";
     if (!formData.teamSize) newErrors.teamSize = "Please select a team size";
     if (!(formData.keyProblem || "").trim()) newErrors.keyProblem = "Please describe the key problem";
-    if (!(formData.primaryGoal || "").trim()) newErrors.primaryGoal = "Please specify your primary goal";
     // userQuery is optional or required? Given it comes from chat, let's make it visible but maybe optional to edit?
     // User logic: "User Query" is what they asked. "Key Problem" is what they need to define.
     // I'll leave userQuery validation out effectively since it's prefilled, but if empty, maybe require it?
@@ -192,10 +213,26 @@ export default function ChatModal({ isOpen, onClose, initialMessage, onSubmit }:
         userEmail: formData.userEmail,
         businessType: formData.businessType,
         teamSize: formData.teamSize,
-        keyProblem: formData.keyProblem,
-        primaryGoal: formData.primaryGoal
+        keyProblem: formData.keyProblem
       };
       localStorage.setItem('laralabs_user_data', JSON.stringify(dataToSave));
+
+      // Submit to Google Sheets (Fire and forget)
+      const scriptUrl = process.env.NEXT_PUBLIC_GOOGLE_SCRIPT_URL;
+      if (scriptUrl) {
+          const sheetData = {
+              ...dataToSave,
+              userQuery: formData.userQuery
+          };
+          fetch(scriptUrl, {
+              method: 'POST',
+              mode: 'no-cors', 
+              headers: {
+                  'Content-Type': 'application/json',
+              },
+              body: JSON.stringify(sheetData)
+          }).catch(err => console.error("Failed to submit to Google Sheets", err));
+      }
       
       setHasSubmittedForm(true);
       setView('chat');
@@ -224,7 +261,7 @@ export default function ChatModal({ isOpen, onClose, initialMessage, onSubmit }:
   return createPortal(
     <AnimatePresence>
       {isOpen && (
-        <div className="fixed inset-0 z-[9999] flex items-center justify-center p-4">
+        <div className={`fixed inset-0 z-[9999] flex ${isMobile ? 'items-end justify-center' : 'items-center justify-center p-4'}`}>
           {/* Backdrop - Glassy and Translucent */}
           <motion.div
             initial={{ opacity: 0 }}
@@ -236,11 +273,17 @@ export default function ChatModal({ isOpen, onClose, initialMessage, onSubmit }:
 
           {/* Modal Content - Blue Gradient Glassy Popup */}
           <motion.div
-            initial={{ opacity: 0, scale: 0.95, y: 20 }}
-            animate={{ opacity: 1, scale: 1, y: 0 }}
-            exit={{ opacity: 0, scale: 0.95, y: 20 }}
+            initial={isMobile ? { opacity: 0, y: "100%" } : { opacity: 0, scale: 0.95, y: 20 }}
+            animate={isMobile ? { opacity: 1, y: 0 } : { opacity: 1, scale: 1, y: 0 }}
+            exit={isMobile ? { opacity: 0, y: "100%" } : { opacity: 0, scale: 0.95, y: 20 }}
             transition={{ duration: 0.4, ease: [0.22, 1, 0.36, 1] }}
-            className={`relative w-full ${view === 'chat' ? 'max-w-5xl h-[800px] bg-gradient-to-br from-[#020617]/50 via-[#0f172a]/50 to-[#1e1b4b]/50 border border-white/10' : 'max-w-lg h-auto bg-gradient-to-br from-[#020617]/80 via-[#0f172a]/80 to-[#1e1b4b]/80 border border-white/10'} backdrop-blur-3xl ring-1 ring-white/10 rounded-3xl shadow-[0_0_50px_rgba(0,0,0,0.5)] overflow-hidden flex flex-col transition-all duration-500`}
+            className={`relative w-full 
+              ${isMobile ? 'rounded-t-3xl rounded-b-none border-b-0' : 'rounded-3xl'}
+              ${view === 'chat' 
+                ? (isMobile ? 'h-[90vh] bg-[#020617]' : 'max-w-5xl h-[800px] bg-gradient-to-br from-[#020617]/50 via-[#0f172a]/50 to-[#1e1b4b]/50 border border-white/10') 
+                : (isMobile ? 'h-auto max-h-[90vh] bg-white/0 border border-white/10 border-b-0' : 'max-w-lg min-h-[500px] bg-white/0 border border-white/10')
+              } 
+              backdrop-blur-3xl ring-1 ring-white/10 shadow-[0_0_50px_rgba(0,0,0,0.5)] overflow-hidden flex flex-col transition-all duration-500`}
           >
             {/* Close Button (Absolute) */}
             <button 
@@ -258,17 +301,17 @@ export default function ChatModal({ isOpen, onClose, initialMessage, onSubmit }:
                     initial={{ opacity: 0, x: -20 }}
                     animate={{ opacity: 1, x: 0 }}
                     exit={{ opacity: 0, x: -20 }}
-                    className="w-full h-full bg-transparent p-8 overflow-y-auto"
+                    className="w-full h-full bg-transparent p-4 md:p-8 overflow-y-auto"
                 >
                     <div className="h-full flex flex-col justify-center">
-                    <div className="mb-8">
-                        <h3 className="text-2xl font-bold text-white mb-2">Project Details</h3>
-                        <p className="text-gray-400 text-sm">Enter your project context to help us understand.</p>
+                    <div className="mb-6">
+                        <h3 className="text-xl font-bold text-white mb-1">Project Details</h3>
+                        <p className="text-gray-400 text-xs">Enter your project context to help us understand.</p>
                     </div>
 
-                    <form onSubmit={handleSubmit} className="space-y-6">
+                    <form onSubmit={handleSubmit} className="space-y-4">
                         {/* Name and Email Row */}
-                        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                         {/* Name */}
                         <div className="space-y-2">
                             <label className="text-xs font-semibold text-gray-500 uppercase tracking-wider">Full Name</label>
@@ -279,8 +322,8 @@ export default function ChatModal({ isOpen, onClose, initialMessage, onSubmit }:
                                 setFormData({ ...formData, userName: e.target.value });
                                 if (errors.userName) setErrors({ ...errors, userName: "" });
                             }}
-                            placeholder="e.g. John Doe"
-                            className={`w-full px-4 py-3 bg-white/5 backdrop-blur-md border ${errors.userName ? 'border-red-500/50' : 'border-white/10'} rounded-xl focus:outline-none focus:border-indigo-500 text-white placeholder:text-gray-500 transition-all`}
+                            placeholder="e.g. Rahul Sharma"
+                            className={`w-full px-3 py-2.5 bg-white/5 backdrop-blur-md border ${errors.userName ? 'border-red-500/50' : 'border-white/10'} rounded-xl focus:outline-none focus:border-indigo-500 text-white placeholder:text-gray-500 transition-all text-sm`}
                             />
                             {errors.userName && <p className="text-xs text-red-400">{errors.userName}</p>}
                         </div>
@@ -295,14 +338,14 @@ export default function ChatModal({ isOpen, onClose, initialMessage, onSubmit }:
                                 setFormData({ ...formData, userEmail: e.target.value });
                                 if (errors.userEmail) setErrors({ ...errors, userEmail: "" });
                             }}
-                            placeholder="john@example.com"
-                            className={`w-full px-4 py-3 bg-white/5 backdrop-blur-md border ${errors.userEmail ? 'border-red-500/50' : 'border-white/10'} rounded-xl focus:outline-none focus:border-indigo-500 text-white placeholder:text-gray-500 transition-all`}
+                            placeholder="rahul@company.in"
+                            className={`w-full px-3 py-2.5 bg-white/5 backdrop-blur-md border ${errors.userEmail ? 'border-red-500/50' : 'border-white/10'} rounded-xl focus:outline-none focus:border-indigo-500 text-white placeholder:text-gray-500 transition-all text-sm`}
                             />
                             {errors.userEmail && <p className="text-xs text-red-400">{errors.userEmail}</p>}
                         </div>
                         </div>
                         {/* Two Column Row */}
-                        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                         {/* Business Type */}
                         <div className="space-y-2">
                             <label className="text-xs font-semibold text-gray-500 uppercase tracking-wider">Business Type</label>
@@ -313,8 +356,8 @@ export default function ChatModal({ isOpen, onClose, initialMessage, onSubmit }:
                                 setFormData({ ...formData, businessType: e.target.value });
                                 if (errors.businessType) setErrors({ ...errors, businessType: "" });
                             }}
-                            placeholder="e.g. SaaS, Agency"
-                            className={`w-full px-4 py-3 bg-white/5 backdrop-blur-md border ${errors.businessType ? 'border-red-500/50' : 'border-white/10'} rounded-xl focus:outline-none focus:border-indigo-500 text-white placeholder:text-gray-500 transition-all`}
+                            placeholder="e.g. IT Services, EdTech"
+                            className={`w-full px-3 py-2.5 bg-white/5 backdrop-blur-md border ${errors.businessType ? 'border-red-500/50' : 'border-white/10'} rounded-xl focus:outline-none focus:border-indigo-500 text-white placeholder:text-gray-500 transition-all text-sm`}
                             />
                             {errors.businessType && <p className="text-xs text-red-400">{errors.businessType}</p>}
                         </div>
@@ -326,7 +369,7 @@ export default function ChatModal({ isOpen, onClose, initialMessage, onSubmit }:
                             <button
                                 type="button"
                                 onClick={() => setIsDropdownOpen(!isDropdownOpen)}
-                                className={`w-full px-4 py-3 bg-white/5 backdrop-blur-md border ${errors.teamSize ? 'border-red-500/50' : 'border-white/10'} rounded-xl flex items-center justify-between text-left focus:outline-none focus:border-indigo-500 transition-all group`}
+                                className={`w-full px-3 py-2.5 bg-white/5 backdrop-blur-md border ${errors.teamSize ? 'border-red-500/50' : 'border-white/10'} rounded-xl flex items-center justify-between text-left focus:outline-none focus:border-indigo-500 transition-all group text-sm`}
                             >
                                 <span className={formData.teamSize ? "text-white" : "text-gray-700"}>
                                 {formData.teamSize || "Select size"}
@@ -345,7 +388,7 @@ export default function ChatModal({ isOpen, onClose, initialMessage, onSubmit }:
                                         setIsDropdownOpen(false);
                                         if (errors.teamSize) setErrors({ ...errors, teamSize: "" });
                                     }}
-                                    className="w-full px-4 py-3 text-left text-gray-400 hover:bg-white/5 hover:text-white transition-colors flex items-center justify-between text-sm"
+                                    className="w-full px-4 py-2.5 text-left text-gray-400 hover:bg-white/5 hover:text-white transition-colors flex items-center justify-between text-sm"
                                     >
                                     {size}
                                     {formData.teamSize === size && <Check className="w-3 h-3 text-indigo-400" />}
@@ -367,42 +410,26 @@ export default function ChatModal({ isOpen, onClose, initialMessage, onSubmit }:
                             setFormData({ ...formData, keyProblem: e.target.value });
                             if (errors.keyProblem) setErrors({ ...errors, keyProblem: "" });
                             }}
-                            placeholder="Describe the main challenge you are facing..."
+                            placeholder="Tell us about your business challenge..."
                             rows={3}
-                            className={`w-full px-4 py-3 bg-white/5 backdrop-blur-md border ${errors.keyProblem ? 'border-red-500/50' : 'border-white/10'} rounded-xl focus:outline-none focus:border-indigo-500 text-white placeholder:text-gray-500 resize-none transition-all`}
+                            className={`w-full px-3 py-2.5 bg-white/5 backdrop-blur-md border ${errors.keyProblem ? 'border-red-500/50' : 'border-white/10'} rounded-xl focus:outline-none focus:border-indigo-500 text-white placeholder:text-gray-500 resize-none transition-all text-sm`}
                         />
                         {errors.keyProblem && <p className="text-xs text-red-400">{errors.keyProblem}</p>}
                         </div>
 
-                        {/* Primary Goal */}
-                        <div className="space-y-2">
-                        <label className="text-xs font-semibold text-gray-500 uppercase tracking-wider">Primary Goal</label>
-                        <input
-                            type="text"
-                            value={formData.primaryGoal || ""}
-                            onChange={(e) => {
-                            setFormData({ ...formData, primaryGoal: e.target.value });
-                            if (errors.primaryGoal) setErrors({ ...errors, primaryGoal: "" });
-                            }}
-                            placeholder="What is your main objective?"
-                            className={`w-full px-4 py-3 bg-white/5 backdrop-blur-md border ${errors.primaryGoal ? 'border-red-500/50' : 'border-white/10'} rounded-xl focus:outline-none focus:border-indigo-500 text-white placeholder:text-gray-500 transition-all`}
-                        />
-                        {errors.primaryGoal && <p className="text-xs text-red-400">{errors.primaryGoal}</p>}
-                        </div>
+          
 
                         {/* Submit Button */}
                         <button
                         type="submit"
-                        className="w-full py-4 bg-white hover:bg-gray-100 text-black font-bold rounded-xl shadow-lg active:scale-[0.98] transition-all duration-200 mt-2 flex items-center justify-center gap-2 group"
+      
+                        className="w-full py-3 bg-white hover:bg-gray-100 text-black font-bold rounded-xl shadow-lg active:scale-[0.98] transition-all duration-200 mt-2 flex items-center justify-center gap-2 group text-sm"
                         >
                         Continue
                         <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
                         </button>
                     </form>
 
-                    <p className="text-center text-xs text-gray-600 mt-6">
-                        Already have a conversation? <span className="text-white hover:underline cursor-pointer">Load history</span>
-                    </p>
                     </div>
                 </motion.div>
               ) : (
@@ -426,13 +453,10 @@ export default function ChatModal({ isOpen, onClose, initialMessage, onSubmit }:
                                     className="h-6 w-auto object-contain" 
                                 />
                             </div>
-                            <div className="text-xs text-gray-400">
-                                {remainingMessages} / 5 messages remaining
-                            </div>
                         </div>
 
                         {/* Scrollable Content Area */}
-                        <div className="flex-1 overflow-y-auto p-8 scrollbar-thin scrollbar-thumb-white/10 scrollbar-track-transparent">
+                        <div className="flex-1 overflow-y-auto p-4 md:p-8 scrollbar-thin scrollbar-thumb-white/10 scrollbar-track-transparent">
                             <div className="flex flex-col items-center w-full min-h-full">
                                 
                                 {/* Persistent Header / Greeting */}
@@ -515,6 +539,7 @@ export default function ChatModal({ isOpen, onClose, initialMessage, onSubmit }:
                                                         // Links
                                                         a: ({node, ...props}) => <a className="text-blue-400 hover:text-blue-300 underline" target="_blank" rel="noopener noreferrer" {...props} />,
                                                         // Code
+                                                        // eslint-disable-next-line @typescript-eslint/no-explicit-any
                                                         code: ({node, inline, ...props}: any) => 
                                                             inline 
                                                             ? <code className="bg-white/10 px-1.5 py-0.5 rounded text-blue-200 font-mono text-xs" {...props} />
@@ -568,7 +593,7 @@ export default function ChatModal({ isOpen, onClose, initialMessage, onSubmit }:
                         </div>
 
                         {/* Input Area - Floating Glass */}
-                        <div className="flex-none p-6 pt-2 z-20">
+                        <div className="flex-none p-4 md:p-6 pt-2 z-20">
                             <form onSubmit={(e) => handleSendMessage(e)} className="relative">
                                 {/* Main Input */}
                                 <div className={`relative flex items-center bg-black/30 backdrop-blur-2xl border border-white/10 rounded-2xl p-1.5 shadow-2xl transition-all ${remainingMessages === 0 ? 'opacity-50' : 'focus-within:border-indigo-500/50 focus-within:bg-black/40 hover:border-white/20'}`}>
@@ -576,7 +601,7 @@ export default function ChatModal({ isOpen, onClose, initialMessage, onSubmit }:
                                         type="text"
                                         value={chatMessage}
                                         onChange={(e) => setChatMessage(e.target.value)}
-                                        placeholder={remainingMessages === 0 ? "Message limit reached..." : "Ask AI anything..."}
+                                        placeholder={remainingMessages === 0 ? "Let's discuss directly..." : "Ask AI anything..."}
                                         disabled={remainingMessages === 0}
                                         className="flex-1 bg-transparent border-none outline-none text-white placeholder:text-gray-500 px-3 md:px-4 py-3 h-full text-xs md:text-sm font-medium disabled:cursor-not-allowed"
                                     />
@@ -595,10 +620,17 @@ export default function ChatModal({ isOpen, onClose, initialMessage, onSubmit }:
                     </div>
 
                     {/* RIGHT SIDEBAR */}
-                    <div className="hidden md:flex w-[320px] flex-none p-6 flex-col gap-6 bg-black/20 backdrop-blur-md border-l border-white/5">
+                    <div className="hidden md:flex w-[320px] flex-none p-6 flex-col gap-6 bg-black/20 backdrop-blur-md border-l border-white/5 relative overflow-hidden">
+                        {/* Background ambient glow for sidebar */}
+                        <div className="absolute top-0 right-0 w-[300px] h-[300px] bg-blue-600/10 blur-[100px] rounded-full pointer-events-none" />
+                        <div className="absolute bottom-0 left-0 w-[200px] h-[200px] bg-purple-600/10 blur-[80px] rounded-full pointer-events-none" />
+
                         {/* Services Section */}
-                        <div className="space-y-4">
-                            <h3 className="text-gray-400 text-xs font-semibold uppercase tracking-wider pl-1">Services We Offer</h3>
+                        <div className="space-y-4 relative z-10">
+                            <h3 className="text-gray-400 text-xs font-semibold uppercase tracking-wider pl-1 flex items-center gap-2">
+                                <Sparkles className="w-3 h-3 text-blue-400" />
+                                Services We Offer
+                            </h3>
                             <div className="space-y-3">
                                 {SERVICES.map((service, i) => (
                                     <motion.div
@@ -606,56 +638,66 @@ export default function ChatModal({ isOpen, onClose, initialMessage, onSubmit }:
                                         initial={{ opacity: 0, x: 10 }}
                                         animate={{ opacity: 1, x: 0 }}
                                         transition={{ delay: 0.2 + i * 0.1 }}
-                                        className="flex items-start gap-3 p-3 rounded-xl bg-white/5 border border-white/5 hover:bg-white/10 hover:border-white/10 transition-colors group cursor-default"
+                                        className="relative overflow-hidden flex items-center gap-3 p-3 rounded-2xl bg-gradient-to-br from-white/10 via-white/5 to-transparent border border-white/10 hover:border-blue-400/30 hover:bg-white/10 transition-all duration-300 group cursor-default shadow-sm hover:shadow-[0_0_20px_rgba(59,130,246,0.15)]"
                                     >
-                                        <div className="p-2 rounded-lg bg-blue-500/10 text-blue-400 group-hover:text-blue-300 group-hover:bg-blue-500/20 transition-colors">
-                                            <service.icon className="w-4 h-4" />
+                                        {/* Hover Shine Effect */}
+                                        <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/10 to-transparent translate-x-[-200%] group-hover:translate-x-[200%] transition-transform duration-1000" />
+
+                                        <div className="relative w-10 h-10 shrink-0 group-hover:scale-110 transition-transform duration-300">
+                                            <Image 
+                                                src={service.img} 
+                                                alt={service.title} 
+                                                fill 
+                                                className="object-contain drop-shadow-[0_4px_8px_rgba(0,0,0,0.3)]"
+                                            />
                                         </div>
                                         <div>
-                                            <h4 className="text-sm font-medium text-gray-200 group-hover:text-white">{service.title}</h4>
-                                            <p className="text-xs text-gray-500">{service.desc}</p>
+                                            <h4 className="text-sm font-semibold text-gray-100 group-hover:text-white tracking-wide">{service.title}</h4>
+                                            <p className="text-[11px] text-gray-400 group-hover:text-gray-300 font-medium">{service.desc}</p>
                                         </div>
                                     </motion.div>
                                 ))}
                             </div>
                         </div>
 
-                         {/* Updated 'Cost/Value' Style CTA Card - Fixed Rounding */}
-                         <div className="mt-auto">
-<motion.div 
+                         {/* Updated 'Free AI Growth Plan' CTA Card - ULTRA Glassy & Shiny */}
+                         <div className="mt-auto relative z-10">
+                            <motion.div 
                                 initial={{ opacity: 0, y: 10 }}
                                 animate={{ opacity: 1, y: 0 }}
                                 transition={{ delay: 0.5 }}
-                                className="relative overflow-hidden rounded-[24px] p-6 group cursor-default"
+                                className="relative w-full aspect-square rounded-[30px] p-6 bg-gradient-to-br from-white/10 via-white/5 to-black/40 backdrop-blur-xl border border-white/20 shadow-[0_8px_32px_rgba(0,0,0,0.3),inset_0_0_0_1px_rgba(255,255,255,0.1)] overflow-hidden flex flex-col justify-between group hover:border-white/30 transition-all duration-500"
                             >
-                                {/* Vivid Gradient Background with blur */}
-                                <div className="absolute inset-0 bg-gradient-to-br from-blue-600/30 via-indigo-900/40 to-purple-900/40" />
-                                <div className="absolute inset-0 backdrop-blur-2xl bg-black/10" />
+                                {/* Vivid Inner Glows */}
+                                <div className="absolute top-[-30%] right-[-20%] w-[180px] h-[180px] bg-blue-500/40 blur-[50px] rounded-full pointer-events-none mix-blend-screen animate-pulse" />
+                                <div className="absolute bottom-[-20%] left-[-10%] w-[150px] h-[150px] bg-purple-600/40 blur-[60px] rounded-full pointer-events-none mix-blend-screen" />
                                 
-                                {/* Inner Border / Sheen */}
-                                <div className="absolute inset-0 rounded-[24px] border border-white/10 shadow-[inner_0_0_20px_rgba(255,255,255,0.05)]" />
+                                {/* Glass Shine Gradient */}
+                                <div className="absolute inset-0 bg-gradient-to-br from-white/20 via-transparent to-transparent opacity-70 pointer-events-none" />
 
-                                {/* Decorative Sparkles (Positioned absolutely) */}
-                                <div className="absolute top-4 right-8 w-px h-px shadow-[0_0_15px_2px_rgba(255,255,255,0.7)] bg-white animate-pulse" />
-                                <div className="absolute bottom-20 left-10 w-px h-px shadow-[0_0_10px_2px_rgba(168,85,247,0.5)] bg-purple-400 animate-pulse delay-700" />
-                                <Sparkles className="absolute top-6 right-6 w-4 h-4 text-white/30 blur-[0.5px] animate-pulse" />
+                                {/* Text Content */}
+                                <div className="relative z-10 flex flex-col gap-3">
+                                     <h2 className="text-2xl font-bold text-white leading-none tracking-tight drop-shadow-lg">
+                                        Get Free AI <br /> 
+                                        <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-200 to-white">Growth Plan</span>
+                                     </h2>
+                                      <p className="text-blue-100/80 text-xs font-medium leading-relaxed drop-shadow-sm max-w-[80%]">
+                                         Schedule a strategy call to automate & scale.
+                                      </p>
+                                     <Link href="/contact" className="flex items-center gap-2 bg-white text-black px-5 py-2.5 rounded-full text-xs font-bold w-fit mt-2 hover:bg-blue-50 hover:scale-105 transition-all shadow-[0_0_20px_rgba(255,255,255,0.3)] group-hover:shadow-[0_0_25px_rgba(255,255,255,0.5)]">
+                                        Schedule call
+                                        <ArrowRight className="w-3 h-3" />
+                                     </Link>
+                                </div>
 
-                                <div className="relative z-10 flex flex-col h-full">
-                                    {/* Icon Container - Glassy Box */}
-                                    <div className="w-12 h-12 rounded-2xl bg-gradient-to-br from-white/10 to-white/5 border border-white/10 flex items-center justify-center mb-4 shadow-lg backdrop-blur-md group-hover:scale-105 transition-transform duration-500">
-                                        <Calendar className="w-6 h-6 text-white" />
-                                    </div>
-
-                                    {/* Text Content */}
-                                    <h3 className="text-xl font-bold text-white mb-2 tracking-tight">Free AI Audit</h3>
-                                    <p className="text-sm text-blue-100/60 leading-relaxed mb-6">
-                                        Schedule a session to explore automation opportunities.
-                                    </p>
-
-                                    {/* Glassy Button */}
-                                    <button className="w-full py-3 rounded-xl bg-white/10 hover:bg-white/20 border border-white/20 text-white font-semibold text-sm transition-all shadow-lg backdrop-blur-md active:scale-[0.98] group-hover:border-white/30">
-                                        Book Consultation
-                                    </button>
+                                {/* Image Positioned at Bottom Right */}
+                                <div className="absolute bottom-[-5px] right-[-5px] w-[130px] h-[130px] translate-x-2 translate-y-2 group-hover:scale-110 transition-transform duration-500">
+                                    <Image
+                                        src={compImage}
+                                        alt="Computer"
+                                        fill
+                                        className="object-contain drop-shadow-[0_10px_20px_rgba(0,0,0,0.5)]"
+                                    />
                                 </div>
                             </motion.div>
                         </div>
@@ -689,7 +731,6 @@ export default function ChatModal({ isOpen, onClose, initialMessage, onSubmit }:
                         <button
                             onClick={() => {
                                 setShowLimitPopup(false);
-                                onClose();
                             }}
                             className="absolute top-4 right-4 z-20 text-gray-400 hover:text-white transition-colors"
                         >
@@ -704,26 +745,26 @@ export default function ChatModal({ isOpen, onClose, initialMessage, onSubmit }:
                                 </div>
                             </div>
 
-                            <h3 className="text-xl font-bold text-white mb-3">
-                                Message Limit Reached
+                            <h3 className="text-xl font-bold text-white mb-3 px-4">
+                                Let&apos;s discuss the key problem directly with my team
                             </h3>
                             
                             <p className="text-gray-400 mb-8 text-sm leading-relaxed px-4">
-                                You've reached your 5 free messages!<br/>
-                                <span className="text-gray-200">Book a free session</span> with our experts to get personalized AI solutions.
+                                Our experts are ready to help you solve your challenges with personalized AI solutions.
                             </p>
 
                             {/* Buttons */}
                             <div className="w-full space-y-3">
-                                <a
-                                    href="https://laralabs.in/comingsoon"
-                                    target="_blank"
-                                    rel="noopener noreferrer"
+                                <button
+                                    onClick={() => {
+                                        setShowLimitPopup(false);
+                                        window.location.href = "/contact";
+                                    }}
                                     className="w-full py-3.5 bg-blue-600 hover:bg-blue-500 text-white text-sm font-semibold rounded-xl transition-all shadow-lg shadow-blue-900/20 flex items-center justify-center gap-2"
                                 >
                                     Book Free Session
                                     <ArrowRight className="w-4 h-4" />
-                                </a>
+                                </button>
 
                                 <button
                                     onClick={() => {

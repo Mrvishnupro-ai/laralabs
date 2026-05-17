@@ -13,6 +13,7 @@ interface ValidationResult {
 /**
  * Validate and sanitize chat request
  */
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 export function validateChatRequest(body: any): ValidationResult {
   const errors: string[] = [];
 
@@ -81,6 +82,7 @@ export function validateChatRequest(body: any): ValidationResult {
 
   // Sanitize data
   const sanitizedMessage = sanitizeString(body.message);
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const sanitizedHistory = conversationHistory.map((msg: any) => ({
     role: msg.role,
     content: sanitizeString(msg.content)

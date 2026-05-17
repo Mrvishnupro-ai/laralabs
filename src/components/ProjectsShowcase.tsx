@@ -76,7 +76,7 @@ export default function ProjectsShowcase() {
                 </p>
                 
                 <div className="flex flex-col gap-2 items-start md:items-end w-full">
-                     <p className="text-[10px] md:text-xs text-gray-500 uppercase tracking-widest text-right mb-1 w-full md:w-auto">Let's Build Something</p>
+                     <p className="text-[10px] md:text-xs text-gray-500 uppercase tracking-widest text-right mb-1 w-full md:w-auto">Let&apos;s Build Something</p>
                      <p className="text-[10px] md:text-xs text-gray-500 uppercase tracking-widest text-right mb-4 w-full md:w-auto">Meaningful Together</p>
                      
                      <button className="group relative inline-flex items-center gap-4 pl-8 pr-2 py-2 bg-[#ff5500] text-white rounded-full font-bold text-sm transition-all hover:bg-[#ff6600] hover:shadow-[0_0_20px_rgba(255,85,0,0.4)] w-fit self-start md:self-end">

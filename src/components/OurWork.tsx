@@ -2,12 +2,21 @@
 
 import React from 'react';
 import Image from 'next/image';
+import { useRouter } from 'next/navigation';
 import cardImg1 from '../assets/card-image.png';
 import cardImg2 from '../assets/card-image2.png';
 import cardImg3 from '../assets/card-image3.png';
 import cardImg4 from '../assets/card-image4.png';
 
 const OurWork = () => {
+    const router = useRouter();
+
+    const handleExploreClick = () => {
+        if (window.innerWidth < 768) {
+            router.push('/services');
+        }
+    };
+
     return (
         <section className="pt-[30px] pb-[30px] px-[5%] md:px-[10%] max-md:px-4 w-full box-border flex justify-center">
             <div className="relative w-full rounded-[24px] md:rounded-[32px] bg-white/5 border border-white/10 backdrop-blur-[20px] p-4 md:p-6 text-center overflow-hidden shadow-2xl">
@@ -38,7 +47,7 @@ const OurWork = () => {
                         <div className="relative z-10">
 
                             <h3 className="text-3xl font-serif text-white mb-2 max-md:text-lg max-md:leading-tight">Marketing & Growth</h3>
-                            <p className="text-gray-400 font-sans text-sm mb-4 max-md:text-[10px] max-md:mb-1 max-md:leading-tight">Smarter marketing systems using AI to generate leads, run campaigns, and scale.</p>
+                            <p className="text-gray-400 font-sans text-sm mb-4 max-md:text-xs max-md:mb-1 max-md:leading-tight">Smarter marketing systems using AI to generate leads, run campaigns, and scale.</p>
 
                         </div>
                     </div>
@@ -54,7 +63,7 @@ const OurWork = () => {
                             {/* <h5 className="text-xs font-sans uppercase tracking-widest text-blue-400 mb-2">Magic Pots</h5> */}
                             {/* <h5 className="text-xs font-sans uppercase tracking-widest text-blue-400 mb-2">Magic Pots</h5> */}
                             <h3 className="text-3xl font-serif text-white mb-2 max-md:text-lg max-md:leading-tight">Content Creation</h3>
-                            <p className="text-gray-400 font-sans text-sm max-md:text-[10px] max-md:leading-tight">AI powered content, creatives, and designs that match your brand and move fast.</p>
+                            <p className="text-gray-400 font-sans text-sm max-md:text-xs max-md:leading-tight">AI powered content, creatives, and designs that match your brand and move fast.</p>
                         </div>
                     </div>
 
@@ -70,13 +79,17 @@ const OurWork = () => {
                             {/* <h5 className="text-xs font-sans uppercase tracking-widest text-gray-500 mb-2">Top Notch Shots</h5> */}
                             {/* <h5 className="text-xs font-sans uppercase tracking-widest text-gray-500 mb-2">Top Notch Shots</h5> */}
                             <h3 className="text-2xl font-serif text-white mb-2 max-md:text-lg max-md:leading-tight">AI Development & Automation</h3>
-                            <p className="text-gray-400 font-sans text-sm max-md:text-[10px] max-md:leading-tight">Custom AI agents and automations built on your data to simplify operations.</p>
+                            <p className="text-gray-400 font-sans text-sm max-md:text-xs max-md:leading-tight">Custom AI agents and automations built on your data to simplify operations.</p>
 
                         </div>
                     </div>
 
                     {/* Wide Card - Explore Features */}
-                    <div className="md:col-span-2 relative group overflow-hidden rounded-[20px] md:rounded-[24px] bg-blue-800 border border-blue-800 p-5 md:p-6 max-md:p-3 flex items-center justify-between min-h-[120px] md:min-h-[250px] transition-all duration-300 hover:bg-blue-700">
+                    <div 
+                        onClick={handleExploreClick}
+                        suppressHydrationWarning
+                        className="md:col-span-2 relative group overflow-hidden rounded-[20px] md:rounded-[24px] bg-blue-800 border border-blue-800 p-5 md:p-6 max-md:p-3 flex items-center justify-between min-h-[120px] md:min-h-[250px] transition-all duration-300 hover:bg-blue-700 max-md:cursor-pointer"
+                    >
                         {/* Background Image */}
                         <div className="absolute inset-0 z-0 opacity-30 mix-blend-overlay transition-opacity duration-300 group-hover:opacity-50">
                             <Image src={cardImg4} alt="Explore Features" fill className="max-md:object-contain object-cover" />

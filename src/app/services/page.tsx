@@ -2,6 +2,13 @@ import Navbar from "@/components/Navbar";
 import ServicesSwipeCardStack from "@/components/ServicesSwipeCardStack";
 import ProjectsShowcase from "@/components/ProjectsShowcase";
 import ServicesList from "@/components/ServicesList";
+import type { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "AI Automation Services",
+  description: "Explore our range of AI services, from custom digital workers to automated marketing and lead generation solutions.",
+};
+
 
 export default function ServicesPage() {
   return (

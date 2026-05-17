@@ -54,6 +54,7 @@ const CardSwipeStack = () => {
             {/* Left Arrow */}
             <button
                 onClick={prevCard}
+                suppressHydrationWarning
                 className="absolute left-4 md:left-10 z-20 p-4 rounded-full bg-white/5 backdrop-blur-md border border-white/10 hover:bg-white/20 transition-all cursor-pointer text-white/70 hover:text-white transform hover:scale-110 active:scale-95 hidden md:flex"
                 aria-label="Previous Card"
             >
@@ -63,6 +64,7 @@ const CardSwipeStack = () => {
             {/* Right Arrow */}
             <button
                 onClick={nextCard}
+                suppressHydrationWarning
                 className="absolute right-4 md:right-10 z-20 p-4 rounded-full bg-white/5 backdrop-blur-md border border-white/10 hover:bg-white/20 transition-all cursor-pointer text-white/70 hover:text-white transform hover:scale-110 active:scale-95 hidden md:flex"
                 aria-label="Next Card"
             >
@@ -91,7 +93,7 @@ const CardSwipeStack = () => {
                     transition={{ duration: 0.8, ease: "easeInOut" }}
                     className="absolute w-full flex justify-center"
                 >
-                    <CurrentCard />
+                    <CurrentCard onNext={nextCard} onPrev={prevCard} />
                 </motion.div>
             </AnimatePresence>
         </div>

@@ -13,6 +13,10 @@ import {
   Send 
 } from "lucide-react";
 
+export function generateStaticParams() {
+  return [{ slug: 'indonesia-host-asean-summit' }];
+}
+
 export default function BlogPostPage({ params }: { params: { slug: string } }) {
   // Mock data to match the screenshot or just be dummy data
   const post = {
@@ -24,10 +28,10 @@ export default function BlogPostPage({ params }: { params: { slug: string } }) {
     content: (
       <>
         <p className="mb-6 text-lg leading-relaxed text-slate-300">
-          Jakarta, Indonesia – Indonesia has officially been selected as the host country for the ASEAN Climate Summit 2025, marking a historic milestone in the nation's diplomatic and environmental efforts. This will be the first time a Southeast Asian country leads the summit with a full green energy and sustainability agenda.
+          Jakarta, Indonesia – Indonesia has officially been selected as the host country for the ASEAN Climate Summit 2025, marking a historic milestone in the nation&apos;s diplomatic and environmental efforts. This will be the first time a Southeast Asian country leads the summit with a full green energy and sustainability agenda.
         </p>
         <p className="mb-6 text-lg leading-relaxed text-slate-300">
-          The announcement was made during the ASEAN Ministerial Meeting held in Kuala Lumpur last weekend. Indonesia's proposal stood out for its ambitious commitment to renewable energy, climate resilience programs, and sustainable urban development.
+          The announcement was made during the ASEAN Ministerial Meeting held in Kuala Lumpur last weekend. Indonesia&apos;s proposal stood out for its ambitious commitment to renewable energy, climate resilience programs, and sustainable urban development.
         </p>
         <h3 className="text-2xl font-bold text-white mb-4 mt-8">A Regional Focus on Climate Action</h3>
         <p className="mb-6 text-lg leading-relaxed text-slate-300">

@@ -12,7 +12,7 @@ interface StreamResponseParams {
 export class ChatService {
   private static instance: ChatService;
   private readonly apiKey: string;
-  private readonly model: string = 'meta-llama/llama-3.3-70b-instruct:free';
+  private readonly model: string = 'google/gemma-4-26b-a4b-it:free';
   private readonly apiUrl: string = 'https://openrouter.ai/api/v1/chat/completions';
 
   private constructor() {
