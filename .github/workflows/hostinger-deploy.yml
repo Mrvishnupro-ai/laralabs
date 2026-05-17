@@ -28,18 +28,18 @@ jobs:
       - name: Build Static Site
         # We pass the Sanity variables so the build process can pull the latest blogs!
         env:
-          NEXT_PUBLIC_SANITY_PROJECT_ID: $\{{ secrets.NEXT_PUBLIC_SANITY_PROJECT_ID }}
+          NEXT_PUBLIC_SANITY_PROJECT_ID: ${{ secrets.NEXT_PUBLIC_SANITY_PROJECT_ID }}
           NEXT_PUBLIC_SANITY_DATASET: "production"
-          NEXT_PUBLIC_OPENROUTER_API_KEY: $\{{ secrets.NEXT_PUBLIC_OPENROUTER_API_KEY }}
-          NEXT_PUBLIC_GOOGLE_SCRIPT_URL: $\{{ secrets.NEXT_PUBLIC_GOOGLE_SCRIPT_URL }}
+          NEXT_PUBLIC_OPENROUTER_API_KEY: ${{ secrets.NEXT_PUBLIC_OPENROUTER_API_KEY }}
+          NEXT_PUBLIC_GOOGLE_SCRIPT_URL: ${{ secrets.NEXT_PUBLIC_GOOGLE_SCRIPT_URL }}
         run: npm run build
 
       - name: Deploy to Hostinger via FTP
         uses: SamKirkland/FTP-Deploy-Action@v4.3.5
         with:
-          server: $\{{ secrets.FTP_SERVER }}
-          username: $\{{ secrets.FTP_USERNAME }}
-          password: $\{{ secrets.FTP_PASSWORD }}
+          server: ${{ secrets.FTP_SERVER }}
+          username: ${{ secrets.FTP_USERNAME }}
+          password: ${{ secrets.FTP_PASSWORD }}
           local-dir: ./out/
           # Change this if your Hostinger public folder is different (e.g., public_html)
           server-dir: /public_html/
