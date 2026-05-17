@@ -1,0 +1,43 @@
+name: Deploy to Hostinger FTP
+
+on:
+  push:
+    branches:
+      - main
+  # This enables Sanity to trigger a rebuild via Webhook
+  repository_dispatch:
+    types: [sanity-publish]
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+
+      - name: Install Dependencies
+        run: npm ci
+
+      - name: Build Static Site
+        # We pass the Sanity variables so the build process can pull the latest blogs!
+        env:
+          NEXT_PUBLIC_SANITY_PROJECT_ID: $\{{ secrets.NEXT_PUBLIC_SANITY_PROJECT_ID }}
+          NEXT_PUBLIC_SANITY_DATASET: "production"
+        run: npm run build
+
+      - name: Deploy to Hostinger via FTP
+        uses: SamKirkland/FTP-Deploy-Action@v4.3.5
+        with:
+          server: $\{{ secrets.FTP_SERVER }}
+          username: $\{{ secrets.FTP_USERNAME }}
+          password: $\{{ secrets.FTP_PASSWORD }}
+          local-dir: ./out/
+          # Change this if your Hostinger public folder is different (e.g., public_html)
+          server-dir: /public_html/
