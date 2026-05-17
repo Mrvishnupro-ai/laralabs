@@ -12,7 +12,7 @@ interface StreamResponseParams {
 export class ChatService {
   private static instance: ChatService;
   private readonly apiKey: string;
-  private readonly model: string = 'google/gemma-4-26b-a4b-it:free';
+  private readonly model: string = 'deepseek/deepseek-v4-flash';
   private readonly apiUrl: string = 'https://openrouter.ai/api/v1/chat/completions';
 
   private constructor() {

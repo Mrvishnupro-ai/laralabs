@@ -1,21 +1,32 @@
 import React from 'react';
 
 export default function StructuredData() {
-  const structuredData = {
-    "@context": "https://schema.org",
-    "@type": "Organization",
-    "name": "Lara Labs AI",
-    "url": "https://www.laralabs.in",
-    "logo": "https://www.laralabs.in/ultimate.jpg", // Replace with actual logo URL when available
-    "description": "Success as a Service. We build intelligent digital workers that automate complex workflows.",
-    "address": {
-      "@type": "PostalAddress",
-      "addressCountry": "IN"
+  const structuredData = [
+    {
+      "@context": "https://schema.org",
+      "@type": "Organization",
+      "name": "Lara Labs AI",
+      "url": "https://www.laralabs.in",
+      "logo": "https://www.laralabs.in/ultimate.jpg",
+      "description": "An AI Automation Agency specializing in custom AI agents, RAG systems, and workflow automation for businesses.",
+      "address": {
+        "@type": "PostalAddress",
+        "addressCountry": "IN"
+      },
+      "contactPoint": {
+        "@type": "ContactPoint",
+        "contactType": "customer support",
+        "email": "hello@laralabs.in"
+      }
     },
-    "sameAs": [
-      // Add social links here if provided later
-    ]
-  };
+    {
+      "@context": "https://schema.org",
+      "@type": "WebSite",
+      "url": "https://www.laralabs.in",
+      "name": "Lara Labs AI",
+      "description": "Transform your Business with AI | AI Automation Agency"
+    }
+  ];
 
   return (
     <script

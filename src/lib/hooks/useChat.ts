@@ -103,10 +103,8 @@ export function useChat({ userContext, onError, onLimitReached }: UseChatOptions
         apiKey: process.env.NEXT_PUBLIC_OPENROUTER_API_KEY || ''
       });
 
-      // Construct instructions (sent as user message since Gemma 4 free may not support system role)
-      const instructions = `[INSTRUCTIONS - Follow these for every response]
-
-You are a website assistant for an AI automation agency.
+      // System prompt (paid models support system role properly)
+      const systemPrompt = `You are a website assistant for an AI automation agency.
 Your goals:
 1. Answer clearly in simple English, daily use english
 2. the response should feel that user got some value from it, it might be knowledge or service or italic font quote releated to business or ai.
@@ -123,17 +121,10 @@ Your goals:
 - **Key Challenge**: ${userContext?.keyProblem || 'Not specified'}
 
 At Hight level laralabs offer these services
-Business Automation & AI Agents
-Scalable Software Solutions
-Marketing Operations 
-AI Creatives & Content Systems
+Business Automation & AI Agents, Scalable Software Solutions, Marketing Operations, AI Creatives & Content Systems.
+If we go deeper we do chatbots, integration, RAG Systems, software devlopement...etc`;
 
-If we go deeper we do chatbots, integration,RAG Systems, software devlopement...etc
-[END INSTRUCTIONS]
-`;
-
-      // Prepare messages for API (History + Current)
-      // Limit context to last 6 messages (approx 3 turns) as per k=3 requirement
+      // Prepare messages for API (System + History + Current)
       const historyContext = messages.slice(-6).map(m => ({ 
         role: m.role === 'ai' ? 'assistant' : 'user', 
         content: m.content 
@@ -141,8 +132,7 @@ If we go deeper we do chatbots, integration,RAG Systems, software devlopement...
 
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
       const apiMessages: any[] = [
-        { role: 'user', content: instructions },
-        { role: 'assistant', content: 'Understood. I will follow these instructions for every response.' },
+        { role: 'system', content: systemPrompt },
         ...historyContext,
         { role: 'user', content: message.trim() }
       ];
@@ -151,14 +141,13 @@ If we go deeper we do chatbots, integration,RAG Systems, software devlopement...
       setMessages(prev => [...prev, { role: 'ai', content: '', timestamp: Date.now() }]);
       
       const stream = await openrouter.chat.send({
-        model: "google/gemma-4-26b-a4b-it:free",
+        model: "deepseek/deepseek-v4-flash",
         messages: apiMessages,
         stream: true
       });
 
       let aiMessageContent = '';
 
-      // Stream response following official OpenRouter reference pattern
       for await (const chunk of stream) {
         const content = chunk.choices[0]?.delta?.content;
         
@@ -184,6 +173,14 @@ If we go deeper we do chatbots, integration,RAG Systems, software devlopement...
 
     } catch (err) {
       console.error('Chat error:', err);
+      // Remove the empty AI message on error
+      setMessages(prev => {
+        const lastIdx = prev.length - 1;
+        if (prev[lastIdx]?.role === 'ai' && !prev[lastIdx].content) {
+          return prev.slice(0, -1);
+        }
+        return prev;
+      });
       const errorMessage = err instanceof Error ? err.message : 'Failed to send message';
       setError(errorMessage);
       onError?.(errorMessage);
